@@ -1,0 +1,2017 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IRGIU Intelligence Portal - Secure Access</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .login-box {
+            background: rgba(25, 30, 40, 0.95);
+            border-radius: 12px;
+            padding: 3rem;
+            border: 1px solid rgba(100, 181, 246, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            max-width: 400px;
+            backdrop-filter: blur(20px);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-title {
+            font-size: 1.8rem;
+            color: #64b5f6;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .login-subtitle {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .classification-warning {
+            background: linear-gradient(45deg, #d32f2f, #f44336);
+            color: white;
+            text-align: center;
+            padding: 0.8rem;
+            margin-bottom: 2rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            color: #b0b0b0;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(15, 20, 30, 0.8);
+            border: 1px solid rgba(100, 181, 246, 0.3);
+            border-radius: 6px;
+            color: #e0e0e0;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #64b5f6;
+            box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.2);
+        }
+
+        .form-input::placeholder {
+            color: #666;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #64b5f6 0%, #42a5f5 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(100, 181, 246, 0.3);
+        }
+
+        .login-button:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            background: rgba(244, 67, 54, 0.1);
+            color: #f44336;
+            padding: 0.8rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            display: none;
+        }
+
+        .security-notice {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(255, 152, 0, 0.1);
+            border: 1px solid rgba(255, 152, 0, 0.3);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: #ffb74d;
+            text-align: center;
+        }
+
+        .main-portal {
+            display: none;
+        }
+
+        .access-warning {
+            background: linear-gradient(45deg, #d32f2f, #f44336);
+            color: white;
+            text-align: center;
+            padding: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .header {
+            background: rgba(20, 25, 35, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(100, 181, 246, 0.3);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #64b5f6;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .access-level {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .clearance-badge {
+            background: linear-gradient(45deg, #d32f2f, #f44336);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .user-badge {
+            background: rgba(100, 181, 246, 0.2);
+            color: #64b5f6;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(100, 181, 246, 0.3);
+        }
+
+        .logout-btn {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(244, 67, 54, 0.3);
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        .navigation-sidebar {
+            background: rgba(20, 25, 35, 0.9);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(100, 181, 246, 0.2);
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-title {
+            color: #64b5f6;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-item {
+            background: rgba(15, 20, 30, 0.6);
+            color: #a0a0a0;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            border: 1px solid rgba(100, 181, 246, 0.1);
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(100, 181, 246, 0.1);
+            color: #64b5f6;
+            border-color: rgba(100, 181, 246, 0.3);
+            transform: translateX(5px);
+        }
+
+        .nav-item.restricted {
+            background: rgba(50, 50, 50, 0.3);
+            color: #666;
+            cursor: not-allowed;
+            border-color: rgba(100, 100, 100, 0.2);
+        }
+
+        .nav-item.restricted:hover {
+            transform: none;
+            background: rgba(50, 50, 50, 0.3);
+            color: #666;
+        }
+
+        .content-area {
+            background: rgba(25, 30, 40, 0.8);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid rgba(100, 181, 246, 0.2);
+            min-height: 800px;
+        }
+
+        .section-content {
+            display: none;
+        }
+
+        .section-content.active {
+            display: block;
+        }
+
+        .classification-header {
+            background: linear-gradient(90deg, #d32f2f, #f44336);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            margin: -2rem -2rem 2rem -2rem;
+            border-radius: 12px 12px 0 0;
+            text-align: center;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .section-title {
+            color: #64b5f6;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            border-bottom: 2px solid rgba(100, 181, 246, 0.3);
+            padding-bottom: 0.5rem;
+        }
+
+        .subsection-title {
+            color: #81c784;
+            font-size: 1.4rem;
+            margin: 2rem 0 1rem 0;
+            font-weight: 600;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .meta-item {
+            background: rgba(15, 20, 30, 0.6);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 3px solid #64b5f6;
+        }
+
+        .meta-label {
+            font-size: 0.8rem;
+            color: #a0a0a0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.3rem;
+        }
+
+        .meta-value {
+            color: #e0e0e0;
+            font-weight: 500;
+        }
+
+        .content-text {
+            color: #d0d0d0;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-text p {
+            margin-bottom: 1rem;
+        }
+
+        .content-text ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-text li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-box {
+            background: rgba(100, 181, 246, 0.1);
+            border: 1px solid rgba(100, 181, 246, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .warning-box {
+            background: rgba(255, 152, 0, 0.1);
+            border: 1px solid rgba(255, 152, 0, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid #ff9800;
+        }
+
+        .critical-box {
+            background: rgba(244, 67, 54, 0.1);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid #f44336;
+        }
+
+        .employment-timeline {
+            position: relative;
+            padding-left: 2rem;
+            margin: 2rem 0;
+        }
+
+        .employment-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #64b5f6, rgba(100, 181, 246, 0.3));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            padding-left: 1.5rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -0.75rem;
+            top: 0.3rem;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #64b5f6;
+            border: 2px solid rgba(25, 30, 40, 1);
+        }
+
+        .timeline-period {
+            color: #64b5f6;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .timeline-role {
+            color: #e0e0e0;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-details {
+            color: #b0b0b0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .risk-matrix {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .risk-item {
+            background: rgba(15, 20, 30, 0.8);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(100, 181, 246, 0.2);
+        }
+
+        .risk-title {
+            color: #64b5f6;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .risk-level {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .risk-low {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+            border: 1px solid #4caf50;
+        }
+
+        .risk-moderate {
+            background: rgba(255, 152, 0, 0.2);
+            color: #ff9800;
+            border: 1px solid #ff9800;
+        }
+
+        .risk-high {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+            border: 1px solid #f44336;
+        }
+
+        .placeholder-content {
+            background: rgba(15, 20, 30, 0.4);
+            border: 2px dashed rgba(100, 181, 246, 0.3);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            color: #a0a0a0;
+            font-style: italic;
+        }
+
+        .access-restricted {
+            background: rgba(50, 50, 50, 0.3);
+            border: 2px dashed rgba(100, 100, 100, 0.3);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .navigation-sidebar {
+                position: static;
+                order: 2;
+            }
+            
+            .content-area {
+                order: 1;
+            }
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(100, 181, 246, 0.3);
+            z-index: 1000;
+        }
+
+        .scroll-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #64b5f6, #42a5f5);
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Portal -->
+    <div class="login-container" id="loginContainer">
+        <div class="login-box">
+            <div class="login-header">
+                <div class="login-title">IRGIU Portal</div>
+                <div class="login-subtitle">Secure Access Required</div>
+            </div>
+            
+            <div class="classification-warning">
+                ⚠ Restricted Intelligence System ⚠
+            </div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label" for="username">User Identifier</label>
+                    <input type="text" id="username" class="form-input" placeholder="Enter user ID" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="password">Access Code</label>
+                    <input type="password" id="password" class="form-input" placeholder="Enter access code" required>
+                </div>
+                
+                <button type="submit" class="login-button">Authenticate</button>
+                
+                <div class="error-message" id="errorMessage">
+                    Access denied. Invalid credentials.
+                </div>
+            </form>
+            
+            <div class="security-notice">
+                <strong>Security Notice:</strong> This system is monitored. Unauthorized access attempts are logged and may result in prosecution.
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Main Portal (Initially Hidden) -->
+    <div class="main-portal" id="mainPortal">
+        <div class="access-warning">
+            ⚠ RESTRICTED ACCESS - SUBJECT ASSESSMENT ONLY ⚠
+        </div>
+
+        <div class="scroll-indicator">
+            <div class="scroll-progress" id="scrollProgress"></div>
+        </div>
+
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">IRGIU Intelligence Portal</div>
+                <div class="access-level">
+                    <div class="user-badge">Subject Investigation Access</div>
+                    <div class="clearance-badge">Restricted</div>
+                    <div class="logout-btn" onclick="logout()">Logout</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-container">
+        <div class="navigation-sidebar">
+            <div class="nav-section">
+                <div class="nav-title">Investigation Modules</div>
+                <div class="nav-item active" onclick="showSection('initial-inquiry')">
+                    01. Initial Inquiry & Profile
+                </div>
+                <div class="nav-item" onclick="showSection('osint-investigation')">
+                    02. Expanded OSINT Investigation
+                </div>
+                <div class="nav-item" onclick="showSection('employment-assessment')">
+                    03. Employment & Intelligence Ties
+                </div>
+                <div class="nav-item" onclick="showSection('deep-dive-associates')">
+                    04. Deep Dive: Soffa & Arif-Fear
+                </div>
+                <div class="nav-item" onclick="showSection('temporal-analysis')">
+                    05. Temporal Overlap Analysis
+                </div>
+                <div class="nav-item" onclick="showSection('comprehensive-evaluation')">
+                    06. Comprehensive Evaluation
+                </div>
+                <div class="nav-item" onclick="showSection('enhanced-mitigation')">
+                    07. Enhanced Analysis & Mitigation
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">Platform Features</div>
+                <div class="nav-item restricted">
+                    📊 Daily Intelligence Brief
+                </div>
+                <div class="nav-item restricted">
+                    🌍 Regional Analysis
+                </div>
+                <div class="nav-item restricted">
+                    📈 Trend Analysis
+                </div>
+                <div class="nav-item restricted">
+                    🔔 Alert System
+                </div>
+                <div class="nav-item restricted">
+                    🗺️ Interactive Map
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">Quick Actions</div>
+                <div class="nav-item" onclick="downloadReport()">
+                    📄 Download Assessment
+                </div>
+                <div class="nav-item" onclick="printReport()">
+                    🖨️ Print Report
+                </div>
+                <div class="nav-item" onclick="shareReport()">
+                    📤 Share (Classified)
+                </div>
+            </div>
+        </div>
+
+        <div class="content-area">
+            <!-- Section 1: Initial Inquiry and Profile Analysis -->
+            <div class="section-content active" id="initial-inquiry">
+                <div class="classification-header">
+                    OSINT Assessment with Preliminary Risk Analysis - Deborah Fiorin
+                </div>
+                
+                <h1 class="section-title">01. Initial Inquiry and Profile Analysis</h1>
+                
+                <div class="meta-grid">
+                    <div class="meta-item">
+                        <div class="meta-label">Assessment Date</div>
+                        <div class="meta-value">15 July 2025, 11:15 BST</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Subject</div>
+                        <div class="meta-value">Deborah Fiorin</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Classification</div>
+                        <div class="meta-value">OSINT Assessment</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Prepared By</div>
+                        <div class="meta-value">Internal Investigation Unit</div>
+                    </div>
+                </div>
+
+                <h2 class="subsection-title">Objective Statement</h2>
+                <div class="content-text">
+                    <p>To investigate Deborah Fiorin's professional background, focusing on her employment history, and assess any direct or indirect engagement with intelligence agencies using OSINT and limited HUMINT considerations. Provide a critical risk-rated intelligence report based on available evidence.</p>
+                </div>
+
+                <h2 class="subsection-title">Methodology Framework</h2>
+                <div class="content-text">
+                    <p><strong>OSINT Sources:</strong> Analysis of LinkedIn profile, web articles (e.g., MintPress News, Pravda DE, uncut-news.ch), and related public records up to 15 July 2025.</p>
+                    <p><strong>HUMINT Considerations:</strong> No direct human intelligence sources available; reliance on publicly reported insider accounts and whistleblower statements where applicable.</p>
+                    <p><strong>Critical Approach:</strong> Cross-referencing claims with official records and questioning narrative consistency, especially from sources with potential bias.</p>
+                </div>
+
+                <h2 class="subsection-title">Employment History Analysis</h2>
+                <div class="employment-timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-period">June 2022 – Present (3 years, 2 months)</div>
+                        <div class="timeline-role">Islamic Relief UK - Supporters Relations Unit Manager</div>
+                        <div class="timeline-details">
+                            Based in London, England, managing supporter relations. The organization, a prominent Muslim charity, has faced allegations of ties to extremist groups (e.g., Hamas), though independent audits have found no evidence. No direct intelligence agency links are evident in this role.
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-period">Post-2021, Pre-2022 (6-12 months estimated)</div>
+                        <div class="timeline-role">Women's Equality Party - Members and Supporters Manager</div>
+                        <div class="timeline-details">
+                            Managed membership data. No public indication of intelligence agency involvement, though data handling roles could attract scrutiny in sensitive contexts.
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-period">January 2018 – January 2021 (3 years)</div>
+                        <div class="timeline-role">Palestine Solidarity Campaign (PSC) - Membership and Data Officer</div>
+                        <div class="timeline-details">
+                            Oversaw personal data of thousands of activists. MintPress News (7 July 2025) alleges she had prior experience with a U.S. State Department propaganda arm and firms with intelligence connections, raising questions about vetting and data security. Worked closely with Ben Soffa, PSC's national secretary, who has developed member-monitoring software and alleged Zionist ties.
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-period">Pre-2018 (Unspecified Dates)</div>
+                        <div class="timeline-role">Alleged Intelligence-Adjacent Roles</div>
+                        <div class="timeline-details">
+                            Alleged stint at a U.S. State Department propaganda arm (approx. 9 months), political analyst (3 months), and policy analysis (18 months). MintPress claims these roles involved firms with "deep intelligence connections," but no specific employers or dates are provided. Her educational background (MA in International Studies and Diplomacy, SOAS) and multilingual skills (English, Italian, French, German) align with profiles recruited by intelligence agencies, though this is circumstantial.
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="subsection-title">Assessment of Intelligence Agency Engagement</h2>
+                
+                <h3 style="color: #81c784; margin: 1.5rem 0 1rem 0; font-size: 1.2rem;">Direct Engagement Analysis</h3>
+                <div class="content-text">
+                    <p>No concrete evidence (e.g., official employment records, CIA/State Department confirmations) supports direct employment with the CIA or other intelligence agencies. The MintPress allegation of a "CIA-linked U.S. propaganda office" lacks corroboration from primary sources (e.g., U.S. government websites) and may reflect bias or unverified OSINT. The U.S. State Department's cultural diplomacy programs (e.g., public diplomacy) occasionally intersect with intelligence objectives, but this is not definitive proof of CIA affiliation.</p>
+                    <p>Her LinkedIn profile and public statements do not mention intelligence roles, and no whistleblower or official HUMINT source has confirmed direct CIA employment.</p>
+                </div>
+
+                <h3 style="color: #81c784; margin: 1.5rem 0 1rem 0; font-size: 1.2rem;">Indirect Engagement Analysis</h3>
+                <div class="content-text">
+                    <p><strong>Data Handling Roles:</strong> Positions at PSC and Women's Equality Party involved sensitive member data, which could be of interest to intelligence agencies for OSINT or HUMINT purposes. The MintPress report suggests her PSC role may have been leveraged by unknown parties, but this remains speculative without evidence of agency directives.</p>
+                    <p><strong>Network Proximity:</strong> Collaboration with Ben Soffa, alleged to have Zionist connections, and the presence of Elizabeth Arif-Fear (a pro-Israel operative at Islamic Relief UK) suggest potential exposure to intelligence-influenced networks. However, this is inferred rather than proven.</p>
+                    <p><strong>Educational and Skill Profile:</strong> Her academic background and language skills are consistent with recruitment targets for agencies like the CIA, which emphasizes OSINT and HUMINT expertise (per CIA's 2024-2026 OSINT Strategy). This is a risk factor but not evidence of engagement.</p>
+                </div>
+
+                <h2 class="subsection-title">Critical Analysis</h2>
+                <div class="content-text">
+                    <p><strong>Source Credibility:</strong> MintPress News and similar outlets (e.g., uncut-news.ch) have a history of advocacy journalism, which may amplify unverified claims (e.g., CIA ties) to fit a narrative critical of Western or Zionist interests. Lack of official U.S. or UK government confirmation weakens these assertions.</p>
+                    <p><strong>Contextual Risks:</strong> The Israel-Palestine conflict heightens scrutiny of individuals like Fiorin, especially given PSC's activism and Islamic Relief UK's controversial status. Allegations may be politically motivated to discredit pro-Palestinian figures.</p>
+                    <p><strong>Data Security Concerns:</strong> Her access to activist data at PSC and supporter data at Islamic Relief UK raises legitimate questions about potential exploitation, especially if prior roles involved intelligence-adjacent work. However, no breaches or leaks have been documented.</p>
+                </div>
+
+                <h2 class="subsection-title">Risk Rating Assessment</h2>
+                <div class="risk-matrix">
+                    <div class="risk-item">
+                        <div class="risk-title">Direct Intelligence Agency Engagement</div>
+                        <div class="risk-level risk-low">Low (1/5)</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Based on absence of verifiable evidence and reliance on unconfirmed reports.</p>
+                    </div>
+                    
+                    <div class="risk-item">
+                        <div class="risk-title">Indirect Engagement or Vulnerability</div>
+                        <div class="risk-level risk-moderate">Moderate (3/5)</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Due to data handling roles, network proximity, and skill profile, which could attract intelligence interest.</p>
+                    </div>
+                    
+                    <div class="risk-item">
+                        <div class="risk-title">Overall Risk to Organizations</div>
+                        <div class="risk-level risk-moderate">Moderate (3/5)</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Potential for reputational damage or data security risks if allegations gain traction, though no current evidence of compromise.</p>
+                    </div>
+                </div>
+
+                <h2 class="subsection-title">Recommendations</h2>
+                <div class="content-text">
+                    <p><strong>Further Investigation:</strong> Seek official employment records from U.S. State Department or CIA FOIA requests to clarify pre-2018 roles. Engage credible HUMINT sources (e.g., former colleagues) under strict confidentiality.</p>
+                    <p><strong>Risk Mitigation:</strong> Islamic Relief UK should review data access protocols for Fiorin and conduct an independent audit to address public concerns.</p>
+                    <p><strong>Monitoring:</strong> Track OSINT developments for new evidence, given the evolving nature of the Israel-Palestine narrative.</p>
+                </div>
+
+                <div class="highlight-box">
+                    <h3 style="color: #64b5f6; margin-bottom: 1rem;">Preliminary Conclusion</h3>
+                    <p>Deborah Fiorin's career shows a progression from academic and diplomatic roles to advocacy and charity work, with no definitive proof of direct intelligence agency employment. Indirect engagement remains plausible due to her data roles and network, warranting cautious monitoring. The risk rating reflects a need for vigilance rather than immediate alarm, pending further evidence.</p>
+                </div>
+            </div>
+
+            <!-- Section 2: Expanded OSINT Investigation -->
+            <div class="section-content" id="osint-investigation">
+                <div class="classification-header">
+                    Enhanced OSINT Investigation - Asset Development Assessment
+                </div>
+                
+                <h1 class="section-title">02. Expanded OSINT Investigation</h1>
+                
+                <div class="meta-grid">
+                    <div class="meta-item">
+                        <div class="meta-label">Report Update</div>
+                        <div class="meta-value">15 July 2025, 11:30 BST</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Analysis Team</div>
+                        <div class="meta-value">Internal Investigation Unit</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Focus</div>
+                        <div class="meta-value">Asset Development Hypothesis</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Classification</div>
+                        <div class="meta-value">OSINT with Speculative Risk Analysis</div>
+                    </div>
+                </div>
+
+                <h2 class="subsection-title">Enhanced Objective</h2>
+                <div class="content-text">
+                    <p>To explore additional OSINT tools and methods for assessing Deborah Fiorin's background, investigate her colleagues' potential intelligence agency involvement, and evaluate the possibility of her being developed as an asset by an intelligence agency.</p>
+                </div>
+
+                <h2 class="subsection-title">Advanced Methodology</h2>
+                <div class="content-text">
+                    <p><strong>OSINT Tools and Techniques:</strong> Utilization of hypothetical OSINT frameworks (e.g., social media scraping, public records analysis, and network mapping) based on established practices (e.g., search engine data mining, web scraping with tools like Scrapy or Selenium, and sentiment analysis). No direct access to proprietary tools (e.g., OSINT Industries, Babel Street) is available, limiting real-time data retrieval.</p>
+                    <p><strong>Colleague Analysis:</strong> Examination of publicly identified colleagues (e.g., Ben Soffa, Elizabeth Arif-Fear) from her roles at Palestine Solidarity Campaign (PSC) and Islamic Relief UK, using OSINT-derived profiles and reported associations.</p>
+                    <p><strong>Asset Development Hypothesis:</strong> Speculative assessment based on her career trajectory, skill set, and network proximity, cross-referenced with intelligence recruitment patterns (e.g., multilingualism, data handling roles).</p>
+                </div>
+
+                <h2 class="subsection-title">Further OSINT Assessment</h2>
+                <div class="content-text">
+                    <p><strong>Available Tools and Limitations:</strong> OSINT tools such as search engine queries, social media monitoring (e.g., LinkedIn, X), and public records checks could be employed to deepen the investigation. For instance, scraping her LinkedIn connections or analyzing X posts mentioning her could reveal additional professional contacts or activities. However, without access to advanced platforms (e.g., Intelligence X, Maltego), real-time data aggregation and dark web searches are not feasible. Web searches as of 11:18 AM BST on 15 July 2025 show no new public disclosures beyond the MintPress article (7 July 2025) and related commentary.</p>
+                    <p><strong>Potential Next Steps:</strong> Hypothetically, tools like Neotas' Enhanced Due Diligence Platform or OSINT Industries could map her digital footprint (e.g., email-linked accounts, IP activity) or uncover hidden associations. However, these require subscription access and are beyond current capabilities. Manual cross-referencing of news archives and activist forums could yield more context, but no significant updates were found today.</p>
+                </div>
+
+                <h2 class="subsection-title">Colleague Involvement Assessment</h2>
+                
+                <h3 style="color: #81c784; margin: 1.5rem 0 1rem 0; font-size: 1.2rem;">Ben Soffa (PSC National Secretary, 2018-2021)</h3>
+                <div class="content-text">
+                    <p><strong>Role Context:</strong> Worked alongside Fiorin at PSC, where she managed membership data. Soffa is credited with developing member-monitoring software, raising questions about data security practices.</p>
+                    <p><strong>Intelligence Link Hypothesis:</strong> MintPress suggests Soffa has alleged Zionist ties, potentially linking him to Israeli intelligence interests (e.g., Mossad). This is unverified and may reflect bias, as no official records confirm such connections. His software development could attract Western intelligence interest (e.g., MI5, CIA) for counter-terrorism OSINT, but this remains speculative.</p>
+                </div>
+                <div class="risk-matrix" style="grid-template-columns: 1fr;">
+                    <div class="risk-item">
+                        <div class="risk-title">Ben Soffa Intelligence Risk</div>
+                        <div class="risk-level risk-moderate">Low to Moderate (2/5)</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">No direct evidence, but his role warrants scrutiny.</p>
+                    </div>
+                </div>
+
+                <h3 style="color: #81c784; margin: 1.5rem 0 1rem 0; font-size: 1.2rem;">Elizabeth Arif-Fear (Islamic Relief UK, 2017-2021)</h3>
+                <div class="content-text">
+                    <p><strong>Role Context:</strong> A senior figure at Islamic Relief UK, where Fiorin is Supporters Relations Unit Manager. Arif-Fear has been labeled a pro-Israel operative by some sources, though this is contested.</p>
+                    <p><strong>Intelligence Link Hypothesis:</strong> Her alleged pro-Israel stance could suggest indirect ties to intelligence networks (e.g., Mossad or UK liaison services), especially given Islamic Relief UK's scrutiny over Hamas allegations. However, this lacks substantiation and may be a narrative pushed by anti-charity activists.</p>
+                </div>
+                <div class="risk-matrix" style="grid-template-columns: 1fr;">
+                    <div class="risk-item">
+                        <div class="risk-title">Elizabeth Arif-Fear Intelligence Risk</div>
+                        <div class="risk-level risk-low">Low (1/5)</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Insufficient evidence to link her to agencies.</p>
+                    </div>
+                </div>
+
+                <h2 class="subsection-title">Asset Development Analysis</h2>
+                <div class="content-text">
+                    <p><strong>Recruitment Profile:</strong> Fiorin's multilingual skills (English, Italian, French, German), MA in International Studies and Diplomacy (SOAS), and roles handling sensitive data align with intelligence agency recruitment criteria (e.g., CIA's OSINT Strategy 2024-2026 emphasizes language skills and data analysis). Her pre-2018 U.S. roles (alleged propaganda office stint) could have been a recruitment point, though unverified.</p>
+                    <p><strong>Career Trajectory Indicators:</strong> Transitions from alleged U.S. State Department roles to PSC (a high-profile activist group) and Islamic Relief UK (a scrutinized charity) suggest possible placement in influence or monitoring roles. The MintPress claim of CIA-linked employment hints at asset development, but the lack of official records or whistleblower corroboration undermines this.</p>
+                    <p><strong>Network Vulnerability:</strong> Her collaboration with Soffa and proximity to Arif-Fear could have exposed her to intelligence recruitment pitches, especially if agencies sought insights into PSC or Islamic Relief UK activities. Data handling roles increase her value as a potential asset for OSINT or HUMINT collection.</p>
+                    <p><strong>Counter-Narrative Consideration:</strong> The establishment narrative (e.g., no CIA confirmation) may downplay her role to avoid diplomatic friction, while alternative sources (e.g., MintPress) may exaggerate to discredit pro-Palestinian figures. A balanced view suggests her asset status is plausible but unproven.</p>
+                </div>
+
+                <div class="warning-box">
+                    <h3 style="color: #ff9800; margin-bottom: 1rem;">Asset Development Hypothesis</h3>
+                    <p>Could Deborah Fiorin have been developed as an intelligence asset? Her profile suggests several indicators consistent with recruitment patterns, though definitive evidence remains elusive. The combination of language skills, educational background, data access roles, and strategic organizational placements creates a compelling circumstantial case that warrants continued investigation.</p>
+                </div>
+
+                <h2 class="subsection-title">Updated Risk Rating</h2>
+                <div class="risk-matrix">
+                    <div class="risk-item">
+                        <div class="risk-title">Likelihood of Asset Development</div>
+                        <div class="risk-level risk-moderate">Moderate (3/5)</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Based on her profile and network, development as an asset is conceivable, though evidence is circumstantial and reliant on unverified claims.</p>
+                    </div>
+                    
+                    <div class="risk-item">
+                        <div class="risk-title">Colleague-Related Risk</div>
+                        <div class="risk-level risk-moderate">Moderate (3/5)</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Soffa's software and Arif-Fear's alleged stance introduce moderate risk, pending further evidence.</p>
+                    </div>
+                    
+                    <div class="risk-item">
+                        <div class="risk-title">Overall Intelligence Risk</div>
+                        <div class="risk-level risk-moderate">Moderate (3/5)</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Potential for intelligence agency interest exists, but no conclusive proof supports active asset status.</p>
+                    </div>
+                </div>
+
+                <h2 class="subsection-title">Enhanced Recommendations</h2>
+                <div class="content-text">
+                    <p><strong>OSINT Expansion:</strong> Engage with accessible tools (e.g., Google Dorking, social media scraping) to map her digital presence further. Collaborate with OSINT communities (e.g., OSINT.UK) for crowdsourced insights.</p>
+                    <p><strong>Colleague Verification:</strong> Investigate Soffa's software development through open forums or patent records; assess Arif-Fear's background via UK charity disclosures.</p>
+                    <p><strong>Asset Hypothesis Testing:</strong> Request FOIA data from U.S. agencies or monitor for leaks from credible HUMINT sources, though this exceeds current capabilities.</p>
+                </div>
+
+                <div class="critical-box">
+                    <h3 style="color: #f44336; margin-bottom: 1rem;">Stage 1 Conclusion</h3>
+                    <p>Further OSINT assessment is limited by tool access but could be enhanced with manual searches or professional platforms. Colleagues Soffa and Arif-Fear present moderate risk due to their roles and alleged ties, though evidence is thin. Fiorin's potential as an asset is plausible given her skills and positions, but the narrative remains speculative without official confirmation. Continued monitoring and deeper investigation are warranted.</p>
+                </div>
+            </div>
+
+            <!-- Section 3: Employment Assessment -->
+            <div class="section-content" id="employment-assessment">
+                <div class="classification-header">
+                    Investigative Assessment of Employment and Intelligence Ties
+                </div>
+                
+                <h1 class="section-title">03. Employment History & Intelligence Ties Assessment</h1>
+                
+                <div class="meta-grid">
+                    <div class="meta-item">
+                        <div class="meta-label">Assessment Date</div>
+                        <div class="meta-value">15 July 2025, 11:15 BST</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Analysis Team</div>
+                        <div class="meta-value">Internal Investigation Unit</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Subject</div>
+                        <div class="meta-value">Deborah Fiorin</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Classification</div>
+                        <div class="meta-value">OSINT Assessment with Preliminary Risk Analysis</div>
+                    </div>
+                </div>
+
+                <h2 class="subsection-title">Investigative Objective</h2>
+                <div class="content-text">
+                    <p>To investigate Deborah Fiorin's professional background, focusing on her employment history, and assess any direct or indirect engagement with intelligence agencies using OSINT and limited HUMINT considerations. Provide a critical risk-rated intelligence report based on available evidence.</p>
+                </div>
+
+                <h2 class="subsection-title">Investigative Methodology</h2>
+                <div class="content-text">
+                    <p><strong>OSINT Sources:</strong> Analysis of LinkedIn profile, web articles (e.g., MintPress News, Pravda DE, uncut-news.ch), and related public records up to 15 July 2025.</p>
+                    <p><strong>HUMINT Considerations:</strong> No direct human intelligence sources available; reliance on publicly reported insider accounts and whistleblower statements where applicable.</p>
+                    <p><strong>Critical Approach:</strong> Cross-referencing claims with official records and questioning narrative consistency, especially from sources with potential bias.</p>
+                </div>
+
+                <h2 class="subsection-title">Comprehensive Employment History</h2>
+                <div class="employment-timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-period">June 2022 – Present (3 years, 2 months)</div>
+                        <div class="timeline-role">Islamic Relief UK - Supporters Relations Unit Manager</div>
+                        <div class="timeline-details">
+                            Based in London, England, managing supporter relations. The organization, a prominent Muslim charity, has faced allegations of ties to extremist groups (e.g., Hamas), though independent audits have found no evidence. No direct intelligence agency links are evident in this role.
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-period">Post-2021, Pre-2022 (6-12 months estimated)</div>
+                        <div class="timeline-role">Women's Equality Party - Members and Supporters Manager</div>
+                        <div class="timeline-details">
+                            Managed membership data. No public indication of intelligence agency involvement, though data handling roles could attract scrutiny in sensitive contexts.
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-period">January 2018 – January 2021 (3 years)</div>
+                        <div class="timeline-role">Palestine Solidarity Campaign (PSC) - Membership and Data Officer</div>
+                        <div class="timeline-details">
+                            <strong>Critical Position:</strong> Oversaw personal data of thousands of activists. MintPress News (7 July 2025) alleges she had prior experience with a U.S. State Department propaganda arm and firms with intelligence connections, raising questions about vetting and data security. Worked closely with Ben Soffa, PSC's national secretary, who has developed member-monitoring software and alleged Zionist ties.
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-period">Pre-2018 (Unspecified Dates)</div>
+                        <div class="timeline-role">Alleged Intelligence-Adjacent Roles</div>
+                        <div class="timeline-details">
+                            <strong>Unverified Claims:</strong> Alleged stint at a U.S. State Department propaganda arm (approx. 9 months), political analyst (3 months), and policy analysis (18 months). MintPress claims these roles involved firms with "deep intelligence connections," but no specific employers or dates are provided. Her educational background (MA in International Studies and Diplomacy, SOAS) and multilingual skills (English, Italian, French, German) align with profiles recruited by intelligence agencies, though this is circumstantial.
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="subsection-title">Assessment of Intelligence Agency Engagement</h2>
+                
+                <h3 style="color: #81c784; margin: 1.5rem 0 1rem 0; font-size: 1.2rem;">Direct Engagement Analysis</h3>
+                <div class="content-text">
+                    <p>No concrete evidence (e.g., official employment records, CIA/State Department confirmations) supports direct employment with the CIA or other intelligence agencies. The MintPress allegation of a "CIA-linked U.S. propaganda office" lacks corroboration from primary sources (e.g., U.S. government websites) and may reflect bias or unverified OSINT. The U.S. State Department's cultural diplomacy programs (e.g., public diplomacy) occasionally intersect with intelligence objectives, but this is not definitive proof of CIA affiliation.</p>
+                    <p>Her LinkedIn profile and public statements do not mention intelligence roles, and no whistleblower or official HUMINT source has confirmed direct CIA employment.</p>
+                </div>
+
+                <h3 style="color: #81c784; margin: 1.5rem 0 1rem 0; font-size: 1.2rem;">Indirect Engagement Analysis</h3>
+                <div class="content-text">
+                    <p><strong>Data Handling Roles:</strong> Positions at PSC and Women's Equality Party involved sensitive member data, which could be of interest to intelligence agencies for OSINT or HUMINT purposes. The MintPress report suggests her PSC role may have been leveraged by unknown parties, but this remains speculative without evidence of agency directives.</p>
+                    <p><strong>Network Proximity:</strong> Collaboration with Ben Soffa, alleged to have Zionist connections, and the presence of Elizabeth Arif-Fear (a pro-Israel operative at Islamic Relief UK) suggest potential exposure to intelligence-influenced networks. However, this is inferred rather than proven.</p>
+                    <p><strong>Educational and Skill Profile:</strong> Her academic background and language skills are consistent with recruitment targets for agencies like the CIA, which emphasizes OSINT and HUMINT expertise (per CIA's 2024-2026 OSINT Strategy). This is a risk factor but not evidence of engagement.</p>
+                </div>
+
+                <h2 class="subsection-title">Critical Analysis</h2>
+                <div class="content-text">
+                    <p><strong>Source Credibility:</strong> MintPress News and similar outlets (e.g., uncut-news.ch) have a history of advocacy journalism, which may amplify unverified claims (e.g., CIA ties) to fit a narrative critical of Western or Zionist interests. Lack of official U.S. or UK government confirmation weakens these assertions.</p>
+                    <p><strong>Contextual Risks:</strong> The Israel-Palestine conflict heightens scrutiny of individuals like Fiorin, especially given PSC's activism and Islamic Relief UK's controversial status. Allegations may be politically motivated to discredit pro-Palestinian figures.</p>
+                    <p><strong>Data Security Concerns:</strong> Her access to activist data at PSC and supporter data at Islamic Relief UK raises legitimate questions about potential exploitation, especially if prior roles involved intelligence-adjacent work. However, no breaches or leaks have been documented.</p>
+                </div>
+
+                <h2 class="subsection-title">Risk Rating Assessment</h2>
+                <div class="risk-matrix">
+                    <div class="risk-item">
+                        <div class="risk-title">Likelihood of Direct Intelligence Agency Engagement</div>
+                        <div class="risk-level risk-low">Low (1/5)</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Based on absence of verifiable evidence and reliance on unconfirmed reports.</p>
+                    </div>
+                    
+                    <div class="risk-item">
+                        <div class="risk-title">Likelihood of Indirect Engagement or Vulnerability</div>
+                        <div class="risk-level risk-moderate">Moderate (3/5)</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Due to data handling roles, network proximity, and skill profile, which could attract intelligence interest.</p>
+                    </div>
+                    
+                    <div class="risk-item">
+                        <div class="risk-title">Overall Risk to Organizations</div>
+                        <div class="risk-level risk-moderate">Moderate (3/5)</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Potential for reputational damage or data security risks if allegations gain traction, though no current evidence of compromise.</p>
+                    </div>
+                </div>
+
+                <h2 class="subsection-title">Investigative Recommendations</h2>
+                <div class="content-text">
+                    <p><strong>Further Investigation:</strong> Seek official employment records from U.S. State Department or CIA FOIA requests to clarify pre-2018 roles. Engage credible HUMINT sources (e.g., former colleagues) under strict confidentiality.</p>
+                    <p><strong>Risk Mitigation:</strong> Islamic Relief UK should review data access protocols for Fiorin and conduct an independent audit to address public concerns.</p>
+                    <p><strong>Monitoring:</strong> Track OSINT developments for new evidence, given the evolving nature of the Israel-Palestine narrative.</p>
+                </div>
+
+                <div class="warning-box">
+                    <h3 style="color: #ff9800; margin-bottom: 1rem;">Key Intelligence Gaps</h3>
+                    <p><strong>Pre-2018 Employment Verification:</strong> Critical gap in official verification of alleged U.S. State Department roles requires immediate attention through FOIA requests and diplomatic channels.</p>
+                    <p><strong>Network Analysis Incomplete:</strong> Relationships with Ben Soffa and Elizabeth Arif-Fear require deeper investigation to assess potential intelligence network exposure.</p>
+                    <p><strong>Data Access Audit Required:</strong> Comprehensive review of data handling protocols across all organizations where Fiorin has held sensitive positions.</p>
+                </div>
+
+                <div class="highlight-box">
+                    <h3 style="color: #64b5f6; margin-bottom: 1rem;">Investigative Conclusion</h3>
+                    <p>Deborah Fiorin's career shows a progression from academic and diplomatic roles to advocacy and charity work, with no definitive proof of direct intelligence agency employment. Indirect engagement remains plausible due to her data roles and network, warranting cautious monitoring. The risk rating reflects a need for vigilance rather than immediate alarm, pending further evidence.</p>
+                </div>
+            </div>
+
+            <!-- Section 4: Deep Dive Associates -->
+            <div class="section-content" id="deep-dive-associates">
+                <div class="classification-header">
+                    Deep Dive Assessment: Ben Soffa and Elizabeth Arif-Fear
+                </div>
+                
+                <h1 class="section-title">04. Deep Dive into Ben Soffa and Elizabeth Arif-Fear</h1>
+                
+                <div class="meta-grid">
+                    <div class="meta-item">
+                        <div class="meta-label">Assessment Date</div>
+                        <div class="meta-value">15 July 2025, 12:15 PM BST</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Analysis Team</div>
+                        <div class="meta-value">Internal Investigation Unit</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Focus</div>
+                        <div class="meta-value">Associate Network Analysis</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Classification</div>
+                        <div class="meta-value">OSINT Assessment with Speculative Risk Analysis</div>
+                    </div>
+                </div>
+
+                <h2 class="subsection-title">Investigation Objective</h2>
+                <div class="content-text">
+                    <p>To conduct a comprehensive investigation into the professional and personal backgrounds of Ben Soffa and Elizabeth Arif-Fear, focusing on their roles at the Palestine Solidarity Campaign (PSC) and Islamic Relief UK, respectively, and assess potential direct or indirect engagement with intelligence agencies.</p>
+                </div>
+
+                <h2 class="subsection-title">Investigation Methodology</h2>
+                <div class="content-text">
+                    <p><strong>OSINT Sources:</strong> Analysis of web-based information, social media profiles (e.g., LinkedIn, X), public records (e.g., Companies House), and news reports up to 12:09 PM BST on 15 July 2025.</p>
+                    <p><strong>Critical Approach:</strong> Cross-checking claims with official records, questioning narrative bias (e.g., from advocacy-driven sources like MintPress), and considering establishment counter-narratives.</p>
+                </div>
+
+                <h2 class="subsection-title">Subject Profile: Ben Soffa</h2>
+                
+                <h3 style="color: #81c784; margin: 1.5rem 0 1rem 0; font-size: 1.2rem;">Background Analysis</h3>
+                <div class="content-text">
+                    <p><strong>Role and Affiliation:</strong> National Secretary of the Palestine Solidarity Campaign (PSC) since 2013, with a history of involvement in organizing pro-Palestine demonstrations. Previously worked as Head of Digital Organizing for the Labour Party until November 2023.</p>
+                    <p><strong>Education and Early Career:</strong> Details are sparse, but a 2012 oral history interview indicates a background in Reform Judaism, suggesting a Jewish upbringing. His mother, Diana Frances Soffa, served on the board of The Interfaith Network for the United Kingdom (2008-2011), an organization with Zionist figures like Amanda Bowman.</p>
+                </div>
+
+                <h3 style="color: #81c784; margin: 1.5rem 0 1rem 0; font-size: 1.2rem;">Professional History</h3>
+                <div class="content-text">
+                    <p>Long-term PSC involvement, including leadership during high-profile marches (e.g., Armistice Day 2023 protests).</p>
+                    <p>Labour Party role from November 2015 to November 2023, ending amid controversy over his PSC leadership.</p>
+                    <p>Developed member-monitoring software for PSC, raising data security questions.</p>
+                </div>
+
+                <h3 style="color: #81c784; margin: 1.5rem 0 1rem 0; font-size: 1.2rem;">Potential Intelligence Agency Connections</h3>
+                <div class="content-text">
+                    <p><strong>Direct Engagement:</strong> No definitive evidence links Soffa to agencies like MI5, MI6, or Mossad. However, his admission of working with Assaf Kaplan, a former Israeli military intelligence officer, in the Labour Party (per MintPress, May 2025) suggests possible contact with intelligence networks. The nature of this collaboration—whether operational or incidental—remains unclear, as does Kaplan's current status.</p>
+                    <p><strong>Indirect Engagement:</strong></p>
+                    <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                        <li><strong>Zionist Ties:</strong> His family background and alleged connections to Zionist organizations (e.g., Board of Deputies via his mother's network) could imply indirect influence from Israeli intelligence (e.g., Mossad). MintPress alleges his software may have been used to monitor PSC members, potentially for external interests, though PSC's privacy policy claims responsible data handling.</li>
+                        <li><strong>Labour Party Context:</strong> His role under Keir Starmer, who banned MPs from PSC marches, contrasts with his activism, suggesting a dual role that could attract MI5 scrutiny for counter-extremism or counter-terrorism purposes.</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <h3 style="color: #ff9800; margin-bottom: 1rem;">Critical Analysis: Ben Soffa</h3>
+                    <p>The narrative of Soffa as a "Zionist infiltrator" (MintPress) may be exaggerated to discredit PSC's anti-Zionist stance. His Reform Judaism roots and Labour ties could reflect personal ideology rather than agency direction. Lack of official confirmation (e.g., from UK government) weakens direct link claims.</p>
+                </div>
+
+                <div class="risk-matrix">
+                    <div class="risk-item">
+                        <div class="risk-title">Ben Soffa - Likelihood of Agency Involvement</div>
+                        <div class="risk-level risk-moderate">Moderate (3/5)</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Plausible indirect ties via Kaplan and Zionist networks, but no hard evidence of active recruitment.</p>
+                    </div>
+                    <div class="risk-item">
+                        <div class="risk-title">Ben Soffa - Data Security Risk</div>
+                        <div class="risk-level risk-moderate">Moderate (3/5)</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">His software development raises concerns about potential data exploitation, though unproven.</p>
+                    </div>
+                </div>
+
+                <h2 class="subsection-title">Subject Profile: Elizabeth Arif-Fear</h2>
+                
+                <h3 style="color: #81c784; margin: 1.5rem 0 1rem 0; font-size: 1.2rem;">Background Analysis</h3>
+                <div class="content-text">
+                    <p><strong>Role and Affiliation:</strong> Employed by Islamic Relief UK as a copywriter and editor (October 2017 – July 2021), with a focus on communications. Known for pro-Israel and pro-LGBT views expressed on personal social media.</p>
+                    <p><strong>Professional History:</strong> Worked at Islamic Relief during a period of regulatory scrutiny (e.g., Charity Commission inquiries into Hamas links). Left in July 2021, shortly after a Charity Commission report, amid controversy over her views.</p>
+                    <p><strong>Public Stance:</strong> Advocates for a two-state solution, supports Israel's right to exist (per IHRA definition), and has engaged with Jewish communities, per her 2020 statement to 5Pillars. This contrasts with Islamic Relief's Muslim donor base.</p>
+                </div>
+
+                <h3 style="color: #81c784; margin: 1.5rem 0 1rem 0; font-size: 1.2rem;">Potential Intelligence Agency Connections</h3>
+                <div class="content-text">
+                    <p><strong>Direct Engagement:</strong> No evidence confirms direct employment by agencies like MI5 or Mossad. Her pro-Israel stance and departure timing could suggest a role as an informant, but this is speculative without insider accounts.</p>
+                    <p><strong>Indirect Engagement:</strong></p>
+                    <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                        <li><strong>Pro-Israel Advocacy:</strong> Her public support for Israel, including #AmYisraelChai posts, aligns with Mossad or UK liaison interests in monitoring Muslim charities. Islamic Relief's alleged Hamas scrutiny (e.g., Israeli ban in 2014) makes her position a potential intelligence vantage point.</li>
+                        <li><strong>Charity Context:</strong> Islamic Relief's history of U.S. and UAE allegations (e.g., Union of Good ties) suggests MI5 or CIA interest. Her role during this period could have facilitated intelligence gathering, though her departure weakens ongoing influence claims.</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <h3 style="color: #ff9800; margin-bottom: 1rem;">Critical Analysis: Elizabeth Arif-Fear</h3>
+                    <p>Her pro-Israel views may be genuine personal beliefs rather than agency-driven, as Islamic Relief defended her right to express them. The establishment narrative (e.g., Charity Commission audits finding no Hamas links) contrasts with alternative claims (e.g., 5Pillars), suggesting a polarized debate. Her blocking of critics (e.g., 5Pillars) indicates sensitivity but not proof of agency ties.</p>
+                </div>
+
+                <div class="risk-matrix">
+                    <div class="risk-item">
+                        <div class="risk-title">Elizabeth Arif-Fear - Likelihood of Agency Involvement</div>
+                        <div class="risk-level risk-moderate">Low to Moderate (2/5)</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Possible indirect role due to her stance and charity context, but evidence is weak.</p>
+                    </div>
+                    <div class="risk-item">
+                        <div class="risk-title">Elizabeth Arif-Fear - Reputational Risk to Islamic Relief</div>
+                        <div class="risk-level risk-moderate">Moderate (3/5)</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Her views and departure have fueled donor distrust, impacting the charity's credibility.</p>
+                    </div>
+                </div>
+
+                <h2 class="subsection-title">Comparative Network Analysis</h2>
+                <div class="content-text">
+                    <p><strong>Network Overlap with Fiorin:</strong> Soffa worked with Deborah Fiorin at PSC (2018-2021), where she managed data, while Arif-Fear overlapped with Fiorin at Islamic Relief UK (2022-present). This suggests a network of individuals in sensitive data roles, potentially attractive to intelligence agencies.</p>
+                    <p><strong>Contrasting Agendas:</strong> Soffa's alleged Zionist ties contrast with Arif-Fear's pro-Israel stance, hinting at diverse influences within pro-Palestinian and Muslim charity spaces.</p>
+                </div>
+
+                <div class="highlight-box">
+                    <h3 style="color: #64b5f6; margin-bottom: 1rem;">Key Network Indicators</h3>
+                    <p><strong>Data Access Pattern:</strong> All three individuals (Fiorin, Soffa, Arif-Fear) have held positions involving sensitive data management across politically sensitive organizations.</p>
+                    <p><strong>Temporal Overlap:</strong> Strategic positioning at critical periods - Soffa during PSC's peak activism, Arif-Fear during Islamic Relief's regulatory scrutiny, Fiorin bridging both organizations.</p>
+                    <p><strong>Ideological Positioning:</strong> Diverse but potentially complementary positions within pro-Palestinian and Muslim charity networks, suggesting sophisticated intelligence interest.</p>
+                </div>
+
+                <h2 class="subsection-title">Investigation Recommendations</h2>
+                <div class="content-text">
+                    <p><strong>Soffa:</strong> Investigate Kaplan's role via Labour Party records or Israeli OSINT sources. Analyze his software's code or usage logs (if accessible) for external access patterns.</p>
+                    <p><strong>Arif-Fear:</strong> Review Islamic Relief's internal communications from 2017-2021 for evidence of her influence. Monitor her current activities for shifts indicating agency direction.</p>
+                    <p><strong>Joint Analysis:</strong> Map their professional networks using OSINT tools (e.g., LinkedIn scraping) to identify common contacts with intelligence backgrounds.</p>
+                </div>
+
+                <div class="critical-box">
+                    <h3 style="color: #f44336; margin-bottom: 1rem;">Deep Dive Conclusion</h3>
+                    <p>Ben Soffa's potential ties to Israeli intelligence via Kaplan and his data software pose a moderate risk, though evidence is circumstantial. Elizabeth Arif-Fear's pro-Israel stance and Islamic Relief role suggest a low to moderate intelligence link, likely indirect. Both warrant further scrutiny, particularly in their data-handling contexts, but current OSINT does not confirm active agency roles.</p>
+                </div>
+            </div>
+
+            <!-- Section 5: Temporal Analysis -->
+            <div class="section-content" id="temporal-analysis">
+                <div class="classification-header">
+                    Temporal Overlap and Connection Analysis
+                </div>
+                
+                <h1 class="section-title">05. Temporal Overlap and Connection Analysis</h1>
+                
+                <div class="meta-grid">
+                    <div class="meta-item">
+                        <div class="meta-label">Assessment Date</div>
+                        <div class="meta-value">15 July 2025, 01:17 PM BST</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Analysis Team</div>
+                        <div class="meta-value">Internal Investigation Unit</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Focus</div>
+                        <div class="meta-value">Temporal Overlap Assessment</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Key Finding</div>
+                        <div class="meta-value">No Employment Overlap</div>
+                    </div>
+                </div>
+
+                <h2 class="subsection-title">Investigation Objective</h2>
+                <div class="content-text">
+                    <p>Examination of whether Deborah Fiorin and Elizabeth Arif-Fear worked concurrently at Islamic Relief UK and comprehensive analysis of any direct or indirect connections between the subjects.</p>
+                </div>
+
+                <div class="critical-box">
+                    <h3 style="color: #f44336; margin-bottom: 1rem;">Key Finding: No Temporal Overlap</h3>
+                    <p>Based on the available information, Deborah Fiorin and Elizabeth Arif-Fear did not work at the same time at Islamic Relief UK. There is no overlap between their tenures, as Arif-Fear left in July 2021, nearly a year before Fiorin began in June 2022.</p>
+                </div>
+
+                <h2 class="subsection-title">Employment Timeline Analysis</h2>
+                
+                <div class="employment-timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-period">October 2017 – July 2021 (3 years, 9 months)</div>
+                        <div class="timeline-role">Elizabeth Arif-Fear - Copywriter and Editor</div>
+                        <div class="timeline-details">
+                            Worked at Islamic Relief UK during a period of regulatory scrutiny (e.g., Charity Commission inquiries into Hamas links). Left in July 2021, shortly after a Charity Commission report, amid controversy over her pro-Israel views.
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item" style="background: rgba(244, 67, 54, 0.1); border-left: 3px solid #f44336; padding: 1rem; margin: 2rem 0; border-radius: 6px;">
+                        <div style="color: #f44336; font-weight: 600; margin-bottom: 0.5rem;">EMPLOYMENT GAP</div>
+                        <div style="color: #d0d0d0;">July 2021 – June 2022 (11 months)</div>
+                        <div style="color: #b0b0b0; font-size: 0.9rem;">No overlap period - Arif-Fear departed before Fiorin's arrival</div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-period">June 2022 – Present (3 years, 2 months)</div>
+                        <div class="timeline-role">Deborah Fiorin - Supporters Relations Unit Manager</div>
+                        <div class="timeline-details">
+                            Started her role as Supporters Relations Unit Manager at Islamic Relief UK in June 2022 and has been in the position for 3 years and 2 months as of July 2025, indicating she is still employed there.
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="subsection-title">Comprehensive Connection Analysis</h2>
+                
+                <h3 style="color: #81c784; margin: 1.5rem 0 1rem 0; font-size: 1.2rem;">Shared Organization Analysis</h3>
+                <div class="content-text">
+                    <p><strong>Timeline:</strong> Deborah Fiorin began her role as Supporters Relations Unit Manager in June 2022, while Elizabeth Arif-Fear worked as a copywriter and editor from October 2017 to July 2021. This indicates a gap of nearly a year, with no overlap in their employment periods.</p>
+                    <p><strong>Context:</strong> Both held roles within the same organization, a Muslim charity that has faced scrutiny over alleged ties to extremist groups (e.g., Hamas), though audits have found no evidence. Their positions (Fiorin in supporter relations, Arif-Fear in communications) suggest they could have been part of overlapping teams or projects if their tenures had coincided, but no evidence supports this.</p>
+                </div>
+
+                <h3 style="color: #81c784; margin: 1.5rem 0 1rem 0; font-size: 1.2rem;">Professional Network Assessment</h3>
+                <div class="content-text">
+                    <p><strong>LinkedIn and Public Records:</strong> No public LinkedIn connections, joint publications, or collaborative events (e.g., conferences, campaigns) are evident between Fiorin and Arif-Fear. Their career paths—Fiorin's focus on data management and diplomacy, Arif-Fear's in communications and advocacy—do not show direct intersection beyond Islamic Relief.</p>
+                    <p><strong>Colleagues:</strong> No shared colleagues are explicitly documented. Fiorin's current network includes Islamic Relief staff post-2022, while Arif-Fear's known associates (e.g., from 2017-2021) do not overlap with Fiorin's documented contacts.</p>
+                </div>
+
+                <h3 style="color: #81c784; margin: 1.5rem 0 1rem 0; font-size: 1.2rem;">Ideological or Personal Ties Assessment</h3>
+                <div class="content-text">
+                    <p><strong>Stances:</strong> Arif-Fear's public pro-Israel and pro-LGBT views contrast with Fiorin's association with pro-Palestinian roles (e.g., PSC), suggesting potential ideological divergence. However, no personal interactions (e.g., social media exchanges, joint statements) indicate a relationship.</p>
+                    <p><strong>Geographic Proximity:</strong> Both are based in London, but this is a common factor for many professionals and does not imply a connection.</p>
+                </div>
+
+                <h3 style="color: #81c784; margin: 1.5rem 0 1rem 0; font-size: 1.2rem;">Indirect Connections via Intelligence Allegations</h3>
+                <div class="content-text">
+                    <p><strong>Speculative Link:</strong> The MintPress News article (7 July 2025) alleging Fiorin's CIA-linked past and Arif-Fear's pro-Israel stance could suggest a narrative of intelligence overlap (e.g., Mossad or MI5 monitoring of Islamic Relief). However, this is a hypothesis driven by external sources, not evidence of direct contact between the two.</p>
+                    <p><strong>Network Analysis:</strong> No common third parties (e.g., Ben Soffa, who worked with Fiorin at PSC) link them to Arif-Fear's tenure or activities.</p>
+                </div>
+
+                <div class="warning-box">
+                    <h3 style="color: #ff9800; margin-bottom: 1rem;">Intelligence Implications of Non-Overlap</h3>
+                    <p><strong>Sequential Placement Theory:</strong> The lack of temporal overlap could suggest intentional sequential placement rather than coincidental timing. Intelligence operations often employ sequential assets to maintain organizational penetration while avoiding detection.</p>
+                    <p><strong>Institutional Memory:</strong> Despite no direct overlap, both subjects would have access to Islamic Relief UK's institutional knowledge, donor databases, and operational procedures through their respective tenures.</p>
+                    <p><strong>Continuity of Access:</strong> The gap between departures and arrivals may indicate coordinated intelligence interest in maintaining monitoring capabilities within the organization.</p>
+                </div>
+
+                <h2 class="subsection-title">Risk Assessment Matrix</h2>
+                <div class="risk-matrix">
+                    <div class="risk-item">
+                        <div class="risk-title">Direct Personal Connection</div>
+                        <div class="risk-level risk-low">None Identified (0/5)</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">No evidence of personal interaction, shared activities, or direct communication between subjects.</p>
+                    </div>
+                    
+                    <div class="risk-item">
+                        <div class="risk-title">Professional Network Overlap</div>
+                        <div class="risk-level risk-low">Low (1/5)</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Shared organizational affiliation only, no documented professional collaboration or shared contacts.</p>
+                    </div>
+                    
+                    <div class="risk-item">
+                        <div class="risk-title">Sequential Intelligence Interest</div>
+                        <div class="risk-level risk-moderate">Moderate (3/5)</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Temporal gap suggests possible coordinated intelligence monitoring of Islamic Relief UK through sequential assets.</p>
+                    </div>
+                </div>
+
+                <h2 class="subsection-title">Additional Investigation Recommendations</h2>
+                <div class="content-text">
+                    <p><strong>Internal Records Analysis:</strong> Access to Islamic Relief UK's internal communications, transition documents, and staff records could reveal any handover communications or shared projects between the subjects.</p>
+                    <p><strong>Institutional Knowledge Mapping:</strong> Investigation into whether Fiorin's role incorporated any systems, databases, or procedures previously managed by Arif-Fear's department.</p>
+                    <p><strong>Third-Party Connections:</strong> Enhanced OSINT investigation into mutual connections through Islamic Relief UK board members, donors, or partner organizations.</p>
+                </div>
+
+                <div class="highlight-box">
+                    <h3 style="color: #64b5f6; margin-bottom: 1rem;">Temporal Analysis Conclusion</h3>
+                    <p>There are no confirmed personal, professional, or ideological connections between Deborah Fiorin and Elizabeth Arif-Fear. Their only shared link is their employment at Islamic Relief UK, but their tenures do not overlap (Arif-Fear left in July 2021, Fiorin started in June 2022). Any perceived connection appears to stem from external narratives about Islamic Relief's scrutiny rather than direct interaction.</p>
+                    <p><strong>Intelligence Assessment:</strong> The 11-month gap between tenures may indicate either coincidental timing or strategic sequential placement to maintain organizational monitoring capabilities. Further investigation into internal records or mutual contacts could clarify, but current OSINT shows no evidence of a direct relationship.</p>
+                </div>
+            </div>
+
+            <!-- Section 6: Comprehensive Evaluation -->
+            <div class="section-content" id="comprehensive-evaluation">
+                <div class="classification-header">
+                    Evaluation of Comprehensive Analysis Sufficiency
+                </div>
+                
+                <h1 class="section-title">06. Comprehensive Analysis Evaluation</h1>
+                
+                <div class="meta-grid">
+                    <div class="meta-item">
+                        <div class="meta-label">Assessment Date</div>
+                        <div class="meta-value">15 July 2025, 01:21 PM BST</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Analysis Team</div>
+                        <div class="meta-value">Internal Investigation Unit</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Focus</div>
+                        <div class="meta-value">Analysis Sufficiency Assessment</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Evaluation Status</div>
+                        <div class="meta-value">Gaps Identified</div>
+                    </div>
+                </div>
+
+                <h2 class="subsection-title">Evaluation Objective</h2>
+                <div class="content-text">
+                    <p>Assessment of whether current reports suffice for a comprehensive intelligence analysis and identification of critical gaps requiring additional investigation or resources.</p>
+                </div>
+
+                <div class="highlight-box">
+                    <h3 style="color: #64b5f6; margin-bottom: 1rem;">Overall Assessment</h3>
+                    <p>Your comprehensive intelligence analysis would benefit significantly from the responses and reports provided so far, as they cover a broad range of OSINT data, colleague assessments, organizational context, and risk evaluations related to Deborah Fiorin, Ben Soffa, and Elizabeth Arif-Fear. However, there are gaps and areas that could enhance the robustness and credibility of your analysis, especially for a comprehensive intelligence product.</p>
+                </div>
+
+                <h2 class="subsection-title">Sufficiency of Current Analysis</h2>
+                
+                <h3 style="color: #81c784; margin: 1.5rem 0 1rem 0; font-size: 1.2rem;">Analytical Strengths</h3>
+                <div class="content-text">
+                    <p><strong>Detailed OSINT Coverage:</strong> The reports provide a thorough examination of public data from LinkedIn, news articles (e.g., MintPress), and web sources, offering a solid foundation for understanding Fiorin's career trajectory and the roles of Soffa and Arif-Fear.</p>
+                    <p><strong>Risk Assessments:</strong> The inclusion of likelihood ratings (e.g., 1/5 to 5/5) for agency involvement and data security risks adds a structured analytical framework.</p>
+                    <p><strong>Colleague Analysis:</strong> Deep dives into Soffa and Arif-Fear provide context on their potential intelligence links, enhancing the network perspective around Fiorin.</p>
+                    <p><strong>Critical Thinking:</strong> The reports question source credibility (e.g., MintPress bias) and consider counter-narratives, improving analytical rigor.</p>
+                </div>
+
+                <h3 style="color: #ff9800; margin: 1.5rem 0 1rem 0; font-size: 1.2rem;">Current Limitations</h3>
+                <div class="content-text">
+                    <p><strong>Lack of Primary Data:</strong> Reliance on secondary OSINT (e.g., news reports, public profiles) without access to primary sources (e.g., FOIA requests, internal documents) limits definitive conclusions.</p>
+                    <p><strong>Time Constraint:</strong> The analysis is based on data up to the current moment (01:21 PM BST, 15 July 2025), potentially missing real-time developments (e.g., new X posts, breaking news).</p>
+                    <p><strong>Tool Limitations:</strong> Absence of advanced OSINT tools (e.g., Maltego, Intelligence X) restricts deeper network mapping or dark web insights.</p>
+                    <p><strong>Geopolitical Context:</strong> The Israel-Palestine conflict's influence on narratives is acknowledged but not fully explored with broader regional intelligence trends.</p>
+                    <p><strong>HUMINT Absence:</strong> No human intelligence (e.g., interviews, whistleblower accounts) is incorporated, which could provide insider perspectives.</p>
+                    <p><strong>Quantitative Data:</strong> No charts or statistical analysis (e.g., frequency of agency mentions, data breach incidents) to support qualitative claims.</p>
+                </div>
+
+                <h2 class="subsection-title">Critical Gaps and Enhancement Recommendations</h2>
+                
+                <h3 style="color: #f44336; margin: 1.5rem 0 1rem 0; font-size: 1.2rem;">Priority Enhancement Areas</h3>
+                
+                <div class="risk-matrix">
+                    <div class="risk-item">
+                        <div class="risk-title">Expanded Source Verification</div>
+                        <div class="risk-level risk-high">High Priority</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;"><strong>Action:</strong> Cross-check MintPress claims with official U.S. (CIA, State Department) or UK (MI5, Charity Commission) records via FOIA or public statements. Contact Islamic Relief UK or PSC for official responses (if feasible).</p>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;"><strong>Gap Addressed:</strong> Reduces reliance on potentially biased sources and strengthens credibility.</p>
+                    </div>
+                    
+                    <div class="risk-item">
+                        <div class="risk-title">Real-Time Updates</div>
+                        <div class="risk-level risk-moderate">Moderate Priority</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;"><strong>Action:</strong> Conduct a live search of X posts, news aggregators (e.g., Google News), and activist forums for updates since 01:21 PM BST. Monitor for new allegations or defenses.</p>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;"><strong>Gap Addressed:</strong> Ensures the analysis reflects the latest developments, critical in a dynamic conflict context.</p>
+                    </div>
+                    
+                    <div class="risk-item">
+                        <div class="risk-title">Advanced OSINT Tools</div>
+                        <div class="risk-level risk-moderate">Moderate Priority</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;"><strong>Action:</strong> If possible, use network analysis tools (e.g., Maltego) to map her digital footprint (e.g., email-linked accounts, IP activity) or uncover hidden associations.</p>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;"><strong>Gap Addressed:</strong> Enhances detection of indirect relationships beyond public profiles.</p>
+                    </div>
+                </div>
+
+                <h3 style="color: #f44336; margin: 1.5rem 0 1rem 0; font-size: 1.2rem;">Secondary Enhancement Areas</h3>
+                
+                <div class="content-text">
+                    <p><strong>Geopolitical and Historical Context:</strong> Include a section on the broader intelligence landscape (e.g., CIA/Mossad/MI5 operations in the Israel-Palestine sphere, post-9/11 charity monitoring) to contextualize their roles. Reference historical cases (e.g., Operation Gladio) for precedent.</p>
+                    <p><strong>Gap Addressed:</strong> Provides a framework to assess whether their positions align with known intelligence patterns.</p>
+                </div>
+
+                <div class="content-text">
+                    <p><strong>HUMINT Integration:</strong> If resources allow, seek anonymous testimonials from former colleagues at PSC, Islamic Relief, or the Labour Party via secure channels (e.g., encrypted surveys). Alternatively, analyze whistleblower reports (e.g., from The Intercept).</p>
+                    <p><strong>Gap Addressed:</strong> Adds a human dimension to corroborate or challenge OSINT findings.</p>
+                </div>
+
+                <div class="content-text">
+                    <p><strong>Quantitative Analysis:</strong> If data is available (e.g., number of PSC members monitored, Islamic Relief funding sources), request a chart to visualize trends (e.g., a line chart of Islamic Relief UK funding scrutiny from 2014-2025).</p>
+                    <p><strong>Gap Addressed:</strong> Supports qualitative assessments with empirical evidence, enhancing persuasiveness.</p>
+                </div>
+
+                <div class="warning-box">
+                    <h3 style="color: #ff9800; margin-bottom: 1rem;">Critical Considerations</h3>
+                    <p><strong>Legal and Ethical Considerations:</strong> Include a section on data protection laws (e.g., GDPR) affecting Fiorin's roles and potential intelligence implications. Assess ethical risks of targeting individuals based on unverified claims.</p>
+                    <p><strong>Gap Addressed:</strong> Ensures compliance and balances investigative scope with fairness.</p>
+                    <p><strong>Alternative Hypotheses:</strong> Explore non-intelligence explanations (e.g., career progression, personal beliefs) for their actions, testing the asset development theory against null hypotheses.</p>
+                    <p><strong>Gap Addressed:</strong> Mitigates confirmation bias and strengthens analytical objectivity.</p>
+                </div>
+
+                <h2 class="subsection-title">Resource Requirements Assessment</h2>
+                <div class="content-text">
+                    <p><strong>Immediate Actions (Low Resource):</strong> Real-time OSINT updates, alternative hypothesis development, legal consideration review</p>
+                    <p><strong>Medium-Term Actions (Moderate Resource):</strong> FOIA requests, expanded source verification, quantitative analysis development</p>
+                    <p><strong>Long-Term Actions (High Resource):</strong> Advanced OSINT tool deployment, HUMINT integration, comprehensive geopolitical contextualization</p>
+                </div>
+
+                <h2 class="subsection-title">Implementation Priority Matrix</h2>
+                <div class="risk-matrix">
+                    <div class="risk-item">
+                        <div class="risk-title">Source Verification & FOIA Requests</div>
+                        <div class="risk-level risk-high">Immediate Priority</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Critical for establishing analytical credibility and reducing reliance on potentially biased sources.</p>
+                    </div>
+                    
+                    <div class="risk-item">
+                        <div class="risk-title">Real-Time Monitoring</div>
+                        <div class="risk-level risk-moderate">Ongoing Priority</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Essential for maintaining current intelligence picture in dynamic environment.</p>
+                    </div>
+                    
+                    <div class="risk-item">
+                        <div class="risk-title">Advanced Tool Integration</div>
+                        <div class="risk-level risk-moderate">Resource Dependent</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Valuable enhancement contingent on tool availability and access permissions.</p>
+                    </div>
+                </div>
+
+                <div class="critical-box">
+                    <h3 style="color: #f44336; margin-bottom: 1rem;">Sufficiency Evaluation Conclusion</h3>
+                    <p>The current responses and reports provide a solid foundation for a comprehensive intelligence analysis, offering detailed OSINT, risk ratings, and critical insights into Fiorin, Soffa, and Arif-Fear. However, they are insufficient alone due to missing primary data, real-time updates, advanced tools, geopolitical context, HUMINT, quantitative evidence, legal considerations, and alternative perspectives.</p>
+                    <p><strong>Recommendation:</strong> Incorporating the recommended actions would elevate the analysis to a professional standard, though resource constraints (e.g., tool access, HUMINT) may limit full implementation. Prioritize source verification and real-time updates as immediate next steps to enhance current findings.</p>
+                </div>
+            </div>
+
+            <!-- Section 7: Enhanced Analysis -->
+            <div class="section-content" id="enhanced-mitigation">
+                <div class="classification-header">
+                    Enhanced Analysis with Mitigation Strategies
+                </div>
+                
+                <h1 class="section-title">07. Enhanced Analysis with Mitigation Strategies</h1>
+                
+                <div class="meta-grid">
+                    <div class="meta-item">
+                        <div class="meta-label">Updated Analysis</div>
+                        <div class="meta-value">01:30 PM BST, 15 July 2025</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Analysis Team</div>
+                        <div class="meta-value">Internal Investigation Unit</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Focus</div>
+                        <div class="meta-value">Enhanced Assessment with Mitigation</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Primary Subject</div>
+                        <div class="meta-value">Deborah Fiorin with Contextual Associates</div>
+                    </div>
+                </div>
+
+                <h2 class="subsection-title">Enhanced Analysis Framework</h2>
+                <div class="content-text">
+                    <p>Enhanced analysis focusing on Fiorin, addressing limitations with real-time updates, critical perspectives, network simulation, quantitative context, legal/ethical dimensions, and HUMINT proxies.</p>
+                </div>
+
+                <h2 class="subsection-title">1. Real-Time Web and X Search Intelligence</h2>
+                <div class="content-text">
+                    <p>A fresh search conducted at 01:30 PM BST on July 15, 2025, reveals no significant new developments directly involving Deborah Fiorin beyond the MintPress News article from July 7, 2025, alleging her past work with a CIA-linked U.S. propaganda office. However, broader context includes heightened UK intelligence focus on Iranian threats, with Parliament's watchdog noting a significant surge in Tehran's threat level since 2022, comparable to Russia's.</p>
+                    <p>This escalation, linked to 20 Iran-backed plots, intensifies scrutiny on Muslim charities like Islamic Relief UK, where Fiorin serves as Supporters Relations Unit Manager since June 2022. No X posts or news updates post-July 7 specifically mention Fiorin, but the ongoing Iran-Israel conflict (e.g., IDF strikes on Tehran, reported June 20, 2025) amplifies the geopolitical tension around her role. This suggests her position may attract increased intelligence interest, though no direct evidence ties her to these events.</p>
+                </div>
+
+                <div class="warning-box">
+                    <h3 style="color: #ff9800; margin-bottom: 1rem;">Geopolitical Context Update</h3>
+                    <p><strong>Iranian Threat Escalation:</strong> 20 Iran-backed plots identified since 2022, creating heightened scrutiny environment for Muslim charities and pro-Palestinian organizations.</p>
+                    <p><strong>Intelligence Resource Allocation:</strong> MI5's enhanced focus on Iranian threats directly impacts monitoring of organizations like Islamic Relief UK and individuals with pro-Palestinian backgrounds.</p>
+                </div>
+
+                <h2 class="subsection-title">2. Enhanced Critical Analysis with Alternative Perspectives</h2>
+                <div class="content-text">
+                    <p>The establishment narrative, exemplified by Charity Commission audits finding no evidence of Hamas links at Islamic Relief UK, contrasts sharply with MintPress's claims of Fiorin's CIA ties. The former may downplay risks to maintain diplomatic stability, especially given recent U.S. moves to lift sanctions on Syria (July 1, 2025), signaling a shift in Middle East policy.</p>
+                    <p>MintPress's assertion of Fiorin overseeing sensitive PSC data could be agenda-driven, aiming to discredit pro-Palestinian figures amid rising UK Islamophobia (73% increase in assaults, 2024). An alternative explanation is that her career—spanning diplomacy (SOAS), data management (PSC, 2018-2021), and charity work—reflects a natural progression in humanitarian advocacy, not intelligence recruitment.</p>
+                    <p>Without primary confirmation (e.g., U.S. State Department records), the CIA link remains speculative, urging caution against accepting either narrative uncritically.</p>
+                </div>
+
+                <h2 class="subsection-title">3. Network Mapping Simulation with Available Data</h2>
+                <div class="content-text">
+                    <p>Hypothesizing a network map based on current OSINT, Fiorin's key connections include Ben Soffa (PSC colleague, 2018-2021), who developed member-monitoring software and allegedly worked with Assaf Kaplan (ex-Israeli intelligence), and her current Islamic Relief UK role, post-dating Elizabeth Arif-Fear (2017-2021).</p>
+                    <p>Her earlier role at Protection Group International (PGI, 2016) involved analysts with ex-intelligence backgrounds (e.g., ex-GCHQ's Brian Lord), suggesting proximity to agency-adjacent figures. This network, centered on data-sensitive roles and conflict zones (e.g., Libya), could attract intelligence attention (e.g., MI5 counter-terrorism), though no direct collaboration is proven.</p>
+                    <p>The map highlights vulnerability rather than confirmed ties, pending deeper investigation.</p>
+                </div>
+
+                <div class="highlight-box">
+                    <h3 style="color: #64b5f6; margin-bottom: 1rem;">Network Vulnerability Assessment</h3>
+                    <p><strong>Primary Connections:</strong> Ben Soffa (PSC, software development), Elizabeth Arif-Fear (Islamic Relief UK, sequential placement), Protection Group International (ex-intelligence personnel)</p>
+                    <p><strong>Intelligence Proximity:</strong> Multiple connections to individuals with confirmed or alleged intelligence backgrounds across organizations and timeframes</p>
+                    <p><strong>Data Access Pattern:</strong> Consistent positioning in data-sensitive roles across politically sensitive organizations</p>
+                </div>
+
+                <h2 class="subsection-title">4. Quantitative Context Integration</h2>
+                <div class="content-text">
+                    <p>Quantitative data from recent reports contextualizes Fiorin's role: MI5's 67% Islamist threat caseload and a 48% rise in state threat investigations since 2022 underscore the relevance of charity data management. Islamic Relief UK's scrutiny, while unproven for extremism, aligns with 20 Iran-backed plots identified since 2022, suggesting heightened monitoring.</p>
+                    <p>No specific data on Fiorin's data volume at PSC or Islamic Relief exists, but the 73% rise in UK Islamophobic assaults (2024) reflects a climate where her pro-Palestinian past could draw agency interest. A chart could visualize MI5's caseload trend, but current data lacks granularity for Fiorin-specific metrics.</p>
+                </div>
+
+                <div class="risk-matrix">
+                    <div class="risk-item">
+                        <div class="risk-title">MI5 Threat Caseload Context</div>
+                        <div class="risk-level risk-high">67% Islamist Focus</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Significant intelligence resource allocation to monitoring Islamic organizations and individuals with pro-Palestinian backgrounds.</p>
+                    </div>
+                    
+                    <div class="risk-item">
+                        <div class="risk-title">State Threat Investigation Increase</div>
+                        <div class="risk-level risk-moderate">48% Rise Since 2022</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Heightened state-level monitoring affecting individuals in sensitive organizational positions.</p>
+                    </div>
+                    
+                    <div class="risk-item">
+                        <div class="risk-title">UK Islamophobic Climate</div>
+                        <div class="risk-level risk-high">73% Assault Increase (2024)</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Hostile environment potentially motivating increased intelligence scrutiny of Muslim charity personnel.</p>
+                    </div>
+                </div>
+
+                <h2 class="subsection-title">5. Legal and Ethical Dimensions Assessment</h2>
+                <div class="content-text">
+                    <p>Fiorin's data roles at PSC (2018-2021) and Islamic Relief UK (2022-present) fall under GDPR, which mandates strict data protection. MintPress's claim of her overseeing "thousands" of PSC activists' data raises potential breach concerns, though PSC's privacy policy asserts compliance.</p>
+                    <p>Ethically, targeting Fiorin based on unverified CIA allegations risks reputational harm, especially given the polarized Israel-Palestine narrative. UK charity regulations (e.g., Charity Commission inquiries) require transparency, and any intelligence link could trigger legal reviews, but no breaches are documented.</p>
+                    <p>This underscores the need for balanced analysis to avoid unjust profiling.</p>
+                </div>
+
+                <div class="warning-box">
+                    <h3 style="color: #ff9800; margin-bottom: 1rem;">Legal and Ethical Compliance</h3>
+                    <p><strong>GDPR Considerations:</strong> Data handling roles require strict compliance with privacy regulations, potential breach concerns if intelligence sharing occurred</p>
+                    <p><strong>Reputational Risk:</strong> Unverified allegations could cause significant harm in polarized political environment</p>
+                    <p><strong>Balanced Analysis Requirement:</strong> Need for evidence-based assessment to avoid discriminatory profiling</p>
+                </div>
+
+                <h2 class="subsection-title">6. HUMINT Gaps Analysis with Proxy Indicators</h2>
+                <div class="content-text">
+                    <p>Drawing from analogous cases, such as BBC Persian staff facing regime harassment (2025 reports), insiders might reveal Fiorin's data practices at PSC or Islamic Relief. A hypothetical colleague could confirm routine data sharing with regulators, aligning with MI5's charity oversight, or deny CIA ties, suggesting MintPress exaggeration.</p>
+                    <p>Whistleblower patterns (e.g., MI5 informant scandals, 2022) indicate agencies might recruit data handlers like Fiorin, but no leaks support this. This proxy approach suggests her role's sensitivity could invite recruitment pitches, though it remains unverified.</p>
+                </div>
+
+                <h2 class="subsection-title">Updated Risk Assessment Matrix</h2>
+                <div class="risk-matrix">
+                    <div class="risk-item">
+                        <div class="risk-title">Likelihood of Intelligence Involvement</div>
+                        <div class="risk-level risk-moderate">Moderate (3/5)</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Heightened geopolitical context and data roles increase plausibility, but evidence is circumstantial.</p>
+                    </div>
+                    
+                    <div class="risk-item">
+                        <div class="risk-title">Data Security Risk</div>
+                        <div class="risk-level risk-moderate">Moderate (3/5)</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">GDPR exposure and MintPress claims suggest vulnerability, though no breaches are confirmed.</p>
+                    </div>
+                    
+                    <div class="risk-item">
+                        <div class="risk-title">Reputational Risk</div>
+                        <div class="risk-level risk-moderate">Moderate (3/5)</div>
+                        <p style="margin-top: 0.5rem; color: #b0b0b0; font-size: 0.9rem;">Rising Islamophobia and unproven allegations could impact her and Islamic Relief.</p>
+                    </div>
+                </div>
+
+                <h2 class="subsection-title">Strategic Mitigation Recommendations</h2>
+                <div class="content-text">
+                    <p><strong>Immediate Actions:</strong></p>
+                    <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                        <li>Continuous monitoring of real-time developments and geopolitical context</li>
+                        <li>Enhanced data protection protocol review for Islamic Relief UK</li>
+                        <li>Legal compliance audit for GDPR and charity regulations</li>
+                    </ul>
+                    
+                    <p><strong>Medium-Term Actions:</strong></p>
+                    <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                        <li>FOIA requests for official employment verification</li>
+                        <li>Network analysis expansion using available OSINT tools</li>
+                        <li>Counter-narrative development to address unverified allegations</li>
+                    </ul>
+                    
+                    <p><strong>Long-Term Actions:</strong></p>
+                    <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                        <li>Comprehensive HUMINT source development</li>
+                        <li>Advanced network mapping tool deployment</li>
+                        <li>Institutional security review and enhancement</li>
+                    </ul>
+                </div>
+
+                <div class="critical-box">
+                    <h3 style="color: #f44336; margin-bottom: 1rem;">Enhanced Analysis Conclusion</h3>
+                    <p>This enhanced analysis, focusing on Fiorin, mitigates limitations by updating real-time context, balancing narratives, simulating networks, adding quantitative and legal/ethical layers, and hypothesizing HUMINT. It remains provisional, pending primary data (e.g., FOIA) or tool access, but provides a comprehensive foundation for intelligence evaluation.</p>
+                    <p><strong>Final Recommendation:</strong> Monitor emerging developments and seek official records to solidify findings. The enhanced analysis framework provides robust foundation for ongoing assessment while maintaining analytical objectivity and legal compliance.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Login credentials
+        const validCredentials = {
+            username: '1786-uknh',
+            password: 'Sigma-7Delta-9X'
+        };
+
+        // Login functionality
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            
+            if (username === validCredentials.username && password === validCredentials.password) {
+                // Hide login container and show main portal
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('mainPortal').style.display = 'block';
+                
+                // Store authentication state
+                sessionStorage.setItem('authenticated', 'true');
+            } else {
+                errorMessage.style.display = 'block';
+                // Clear form after failed attempt
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+            }
+        });
+
+        // Logout functionality
+        function logout() {
+            sessionStorage.removeItem('authenticated');
+            document.getElementById('loginContainer').style.display = 'flex';
+            document.getElementById('mainPortal').style.display = 'none';
+            
+            // Clear login form
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        // Check authentication state on page load
+        window.addEventListener('load', function() {
+            if (sessionStorage.getItem('authenticated') === 'true') {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('mainPortal').style.display = 'block';
+            }
+        });
+
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section-content').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked nav item
+            event.target.classList.add('active');
+            
+            // Scroll to top of content area
+            document.querySelector('.content-area').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Scroll progress indicator
+        window.addEventListener('scroll', () => {
+            const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            document.getElementById('scrollProgress').style.width = scrolled + '%';
+        });
+
+        // Action functions
+        function downloadReport() {
+            // Generate PDF content with disclaimer
+            const reportContent = generatePDFContent();
+            
+            // Create PDF download
+            const element = document.createElement('a');
+            const file = new Blob([reportContent], {type: 'text/plain'});
+            element.href = URL.createObjectURL(file);
+            element.download = 'IRGIU_Intelligence_Assessment_Deborah_Fiorin_' + new Date().toISOString().split('T')[0] + '.txt';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+            
+            // Show download confirmation
+            alert('📄 Intelligence Assessment Downloaded\n\nFile: IRGIU_Intelligence_Assessment_Deborah_Fiorin_' + new Date().toISOString().split('T')[0] + '.txt\n\nNote: This document contains a mandatory liability disclaimer. Review all terms before use.');
+        }
+
+        function generatePDFContent() {
+            const currentDate = new Date().toLocaleDateString('en-GB');
+            const currentTime = new Date().toLocaleTimeString('en-GB');
+            
+            return `
+================================================================================
+                        IRGIU INTELLIGENCE ASSESSMENT REPORT
+                      Subject: Deborah Fiorin - Employment History
+                         and Potential Intelligence Agency Engagement
+================================================================================
+
+MANDATORY DISCLAIMER AND LIABILITY LIMITATION
+
+THIS DOCUMENT IS PROVIDED BY IRGIU (INTERNATIONAL RELATIONS AND GEOPOLITICAL INTELLIGENCE UNIT) ON AN "AS IS" BASIS FOR INFORMATIONAL PURPOSES ONLY. BY DOWNLOADING, VIEWING, OR USING THIS DOCUMENT, YOU ACKNOWLEDGE AND AGREE TO THE FOLLOWING TERMS:
+
+1. NO LIABILITY: IRGIU, its members, contributors, and affiliates SHALL NOT BE LIABLE for any direct, indirect, incidental, special, consequential, or punitive damages arising from or related to the use of this document, including but not limited to decisions made based on the information contained herein.
+
+2. NO WARRANTY: This document is provided WITHOUT WARRANTY OF ANY KIND, either express or implied, including but not limited to warranties of accuracy, completeness, reliability, or fitness for a particular purpose.
+
+3. INFORMATIONAL ONLY: This assessment is based on open source intelligence (OSINT) and publicly available information. It does not constitute legal advice, professional consultation, or definitive factual determination.
+
+4. USER RESPONSIBILITY: Users are solely responsible for:
+   - Verifying all information independently
+   - Complying with applicable laws and regulations
+   - Making their own informed decisions
+   - Any consequences resulting from reliance on this document
+
+5. NO ENDORSEMENT: IRGIU does not endorse any conclusions, recommendations, or actions based on this document.
+
+6. LIMITATION OF USE: This document is intended for research and analytical purposes only. It should not be used for:
+   - Personnel decisions
+   - Legal proceedings
+   - Security clearance determinations
+   - Reputation assessment
+   - Any form of discrimination or targeting
+
+7. INDEMNIFICATION: Users agree to indemnify and hold harmless IRGIU from any claims, damages, or expenses arising from their use of this document.
+
+8. SEVERABILITY: If any provision of this disclaimer is deemed invalid, the remaining provisions shall remain in full force and effect.
+
+BY CONTINUING TO READ THIS DOCUMENT, YOU ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTOOD, AND AGREED TO BE BOUND BY THIS DISCLAIMER.
+
+================================================================================
+
+Document Generated: ${currentDate} at ${currentTime}
+Classification: Open Source Intelligence Assessment
+Prepared by: Internal Investigation Unit
+Distribution: Restricted Access
+
+================================================================================
+                                  EXECUTIVE SUMMARY
+================================================================================
+
+Subject: Deborah Fiorin
+Assessment Type: Employment History and Potential Intelligence Agency Engagement
+Date Range: Pre-2018 to Present (July 2025)
+Risk Level: Moderate (3/5)
+
+Key Findings:
+- No definitive evidence of direct intelligence agency employment
+- Circumstantial indicators suggest potential indirect engagement
+- Data handling roles across politically sensitive organizations
+- Network proximity to individuals with alleged intelligence connections
+- Sequential employment pattern at Islamic Relief UK (post-Elizabeth Arif-Fear)
+
+================================================================================
+                               SECTION 1: INITIAL INQUIRY
+================================================================================
+
+OBJECTIVE: To investigate Deborah Fiorin's professional background, focusing on her employment history, and assess any direct or indirect engagement with intelligence agencies using OSINT and limited HUMINT considerations.
+
+EMPLOYMENT TIMELINE:
+- June 2022 – Present: Islamic Relief UK - Supporters Relations Unit Manager
+- Post-2021, Pre-2022: Women's Equality Party - Members and Supporters Manager
+- January 2018 – January 2021: Palestine Solidarity Campaign (PSC) - Membership and Data Officer
+- Pre-2018: Alleged intelligence-adjacent roles (unverified)
+
+RISK ASSESSMENT:
+- Direct Intelligence Agency Engagement: Low (1/5)
+- Indirect Engagement or Vulnerability: Moderate (3/5)
+- Overall Risk to Organizations: Moderate (3/5)
+
+================================================================================
+                            SECTION 2: ENHANCED OSINT INVESTIGATION
+================================================================================
+
+ASSET DEVELOPMENT HYPOTHESIS: Fiorin's multilingual skills, educational background (MA International Studies, SOAS), and data handling roles align with intelligence recruitment patterns.
+
+COLLEAGUE ANALYSIS:
+- Ben Soffa: Moderate risk (3/5) - PSC software development, alleged Zionist connections
+- Elizabeth Arif-Fear: Low-moderate risk (2/5) - Pro-Israel stance, Islamic Relief timing
+
+NETWORK VULNERABILITY: Multiple connections to individuals with confirmed or alleged intelligence backgrounds across organizations and timeframes.
+
+================================================================================
+                          SECTION 3: EMPLOYMENT ASSESSMENT
+================================================================================
+
+CRITICAL POSITION AT PSC: Oversaw personal data of thousands of activists. MintPress News alleges prior U.S. State Department propaganda experience.
+
+INTELLIGENCE AGENCY ENGAGEMENT:
+- Direct: No concrete evidence supports CIA or other agency employment
+- Indirect: Data roles, network proximity, and skill profile create vulnerability
+
+RECOMMENDATIONS:
+- FOIA requests for pre-2018 employment verification
+- Data access protocol review at Islamic Relief UK
+- Continued OSINT monitoring
+
+================================================================================
+                         SECTION 4: ASSOCIATE DEEP DIVE
+================================================================================
+
+BEN SOFFA ANALYSIS:
+- PSC National Secretary (2013-present)
+- Developed member-monitoring software
+- Alleged connection to Assaf Kaplan (ex-Israeli intelligence)
+- Risk: Moderate (3/5)
+
+ELIZABETH ARIF-FEAR ANALYSIS:
+- Islamic Relief UK (2017-2021)
+- Pro-Israel advocacy, departed before Fiorin's arrival
+- Risk: Low-moderate (2/5)
+
+================================================================================
+                        SECTION 5: TEMPORAL OVERLAP ANALYSIS
+================================================================================
+
+KEY FINDING: No employment overlap between Fiorin and Arif-Fear at Islamic Relief UK.
+Gap: 11 months between Arif-Fear's departure (July 2021) and Fiorin's arrival (June 2022).
+
+INTELLIGENCE IMPLICATIONS: Sequential placement pattern may indicate coordinated monitoring rather than coincidental timing.
+
+================================================================================
+                      SECTION 6: COMPREHENSIVE EVALUATION
+================================================================================
+
+ANALYSIS STRENGTHS:
+- Detailed OSINT coverage
+- Structured risk assessments
+- Critical thinking approach
+- Comprehensive colleague analysis
+
+IDENTIFIED GAPS:
+- Lack of primary source verification
+- Limited advanced OSINT tools
+- Absence of HUMINT sources
+- Need for real-time monitoring
+
+PRIORITY RECOMMENDATIONS:
+1. Source verification via FOIA requests
+2. Real-time intelligence updates
+3. Advanced network analysis tools
+
+================================================================================
+                       SECTION 7: ENHANCED ANALYSIS & MITIGATION
+================================================================================
+
+UPDATED CONTEXT: Heightened UK intelligence focus on Iranian threats (20 plots since 2022) intensifies scrutiny on Muslim charities.
+
+QUANTITATIVE CONTEXT:
+- MI5: 67% Islamist threat caseload
+- 48% rise in state threat investigations since 2022
+- 73% increase in UK Islamophobic assaults (2024)
+
+STRATEGIC MITIGATION:
+- Immediate: Continuous monitoring, data protection review
+- Medium-term: FOIA requests, network analysis expansion
+- Long-term: HUMINT development, institutional security enhancement
+
+================================================================================
+                                   FINAL ASSESSMENT
+================================================================================
+
+CONCLUSION: Deborah Fiorin's career progression shows no definitive proof of direct intelligence agency employment. However, circumstantial evidence suggests potential indirect engagement through data roles, network proximity, and sequential organizational placement. The assessment warrants continued monitoring rather than immediate alarm.
+
+OVERALL RISK RATING: Moderate (3/5)
+
+NEXT ACTIONS:
+1. Official employment record verification
+2. Enhanced data security protocols
+3. Ongoing intelligence monitoring
+
+================================================================================
+                                 END OF REPORT
+================================================================================
+
+Report Generated: ${currentDate} at ${currentTime}
+Document ID: IRGIU-DF-${new Date().getTime()}
+Classification: Open Source Intelligence Assessment
+Distribution: Restricted Access Only
+
+IMPORTANT: This document contains a mandatory liability disclaimer. IRGIU accepts no responsibility for decisions made based on this assessment. All information should be independently verified before use.
+
+================================================================================
+`;
+        }
+
+        function printReport() {
+            alert('🖨️ FUNCTION DISABLED\n\nPrint functionality has been disabled for security reasons.\n\nFor hard copy requirements, please contact system administrator through secure channels.');
+        }
+
+        function shareReport() {
+            alert('📤 FUNCTION DISABLED\n\nShare functionality has been disabled for security reasons.\n\nFor authorized distribution, please contact system administrator through secure channels.');
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case '1': 
+                        e.preventDefault();
+                        showSection('initial-inquiry'); 
+                        break;
+                    case '2': 
+                        e.preventDefault();
+                        showSection('osint-investigation'); 
+                        break;
+                    case '3': 
+                        e.preventDefault();
+                        showSection('employment-assessment'); 
+                        break;
+                    case '4': 
+                        e.preventDefault();
+                        showSection('deep-dive-associates'); 
+                        break;
+                    case '5': 
+                        e.preventDefault();
+                        showSection('temporal-analysis'); 
+                        break;
+                    case '6': 
+                        e.preventDefault();
+                        showSection('comprehensive-evaluation'); 
+                        break;
+                    case '7': 
+                        e.preventDefault();
+                        showSection('enhanced-mitigation'); 
+                        break;
+                }
+            }
+        });
+
+        // Add warning for restricted features
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.nav-item.restricted').forEach(item => {
+                item.addEventListener('click', function() {
+                    alert('🚫 ACCESS DENIED\n\nThis feature requires elevated clearance. Your current access is restricted to Subject Assessment: Deborah Fiorin only.\n\nContact system administrator for access level upgrade.');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
