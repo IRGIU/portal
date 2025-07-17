@@ -692,13 +692,13 @@
 
             <div class="nav-section">
                 <div class="nav-title">Quick Actions</div>
-                <div class="nav-item" onclick="downloadReport()">
+                <div class="nav-item restricted">
                     📄 Download Assessment
                 </div>
-                <div class="nav-item" onclick="printReport()">
+                <div class="nav-item restricted">
                     🖨️ Print Report
                 </div>
-                <div class="nav-item" onclick="shareReport()">
+                <div class="nav-item restricted">
                     📤 Share (Classified)
                 </div>
             </div>
@@ -1722,19 +1722,6 @@
             const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
             document.getElementById('scrollProgress').style.width = scrolled + '%';
         });
-
-        // Action functions
-        function downloadReport() {
-            alert('📄 Generating classified assessment report...\n\nThis would compile all sections into a downloadable intelligence document with proper classification headers.');
-        }
-
-        function printReport() {
-            alert('🖨️ Preparing classified document for secure printing...\n\nThis would format the assessment for classified document printing with proper security markings.');
-        }
-
-        function shareReport() {
-            alert('📤 Accessing secure sharing protocols...\n\nThis would open secure channels for sharing classified assessments with authorized personnel.');
-        }
 
         // Keyboard navigation
         document.addEventListener('keydown', function(e) {
