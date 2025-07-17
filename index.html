@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IRGIU Intelligence Portal - Secure Access</title>
-    <script type="text/javascript">(function(w,s){var e=document.createElement("script");e.type="text/javascript";e.async=true;e.src="https://cdn-eu.pagesense.io/js/canvigroup131/b4456ef5171c45169f1a420784c10c13.js";var x=document.getElementsByTagName("script")[0];x.parentNode.insertBefore(e,x);})(window,"script");</script>
-    
     <style>
         * {
             margin: 0;
@@ -15,10 +13,7 @@
 
         body {
             font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #0f1419;
             background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
-            background-attachment: fixed;
-            background-repeat: no-repeat;
             color: #e0e0e0;
             line-height: 1.6;
             min-height: 100vh;
@@ -33,7 +28,6 @@
         }
 
         .login-box {
-            background-color: rgba(25, 30, 40, 0.95);
             background: rgba(25, 30, 40, 0.95);
             border-radius: 12px;
             padding: 3rem;
@@ -42,7 +36,6 @@
             width: 100%;
             max-width: 400px;
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
         }
 
         .login-header {
@@ -96,7 +89,6 @@
         .form-input {
             width: 100%;
             padding: 1rem;
-            background-color: rgba(15, 20, 30, 0.8);
             background: rgba(15, 20, 30, 0.8);
             border: 1px solid rgba(100, 181, 246, 0.3);
             border-radius: 6px;
@@ -168,8 +160,161 @@
             display: none;
         }
 
+        .disclaimer-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .disclaimer-box {
+            background: rgba(25, 30, 40, 0.98);
+            border-radius: 12px;
+            padding: 3rem;
+            border: 2px solid rgba(244, 67, 54, 0.5);
+            box-shadow: 0 20px 60px rgba(244, 67, 54, 0.3);
+            width: 100%;
+            max-width: 700px;
+            backdrop-filter: blur(20px);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .disclaimer-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid rgba(244, 67, 54, 0.3);
+            padding-bottom: 1rem;
+        }
+
+        .disclaimer-title {
+            font-size: 2rem;
+            color: #f44336;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .disclaimer-subtitle {
+            color: #ffab91;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        .disclaimer-content {
+            color: #e0e0e0;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .disclaimer-content h3 {
+            color: #f44336;
+            margin: 1.5rem 0 0.5rem 0;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .disclaimer-content p {
+            margin-bottom: 1rem;
+        }
+
+        .disclaimer-content ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .disclaimer-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .disclaimer-warning {
+            background: linear-gradient(45deg, #d32f2f, #f44336);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            text-align: center;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .disclaimer-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(244, 67, 54, 0.3);
+        }
+
+        .disclaimer-btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+
+        .disclaimer-accept {
+            background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+            color: white;
+        }
+
+        .disclaimer-accept:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        .disclaimer-decline {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            color: white;
+        }
+
+        .disclaimer-decline:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(244, 67, 54, 0.3);
+        }
+
+        .disclaimer-checkbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1.5rem 0;
+            gap: 0.5rem;
+        }
+
+        .disclaimer-checkbox {
+            width: 18px;
+            height: 18px;
+            accent-color: #f44336;
+        }
+
+        .disclaimer-checkbox-label {
+            color: #e0e0e0;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
         .access-warning {
-            background-color: #d32f2f;
             background: linear-gradient(45deg, #d32f2f, #f44336);
             color: white;
             text-align: center;
@@ -181,10 +326,8 @@
         }
 
         .header {
-            background-color: rgba(20, 25, 35, 0.95);
             background: rgba(20, 25, 35, 0.95);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(100, 181, 246, 0.3);
             padding: 1rem 0;
             position: sticky;
@@ -261,7 +404,6 @@
         }
 
         .navigation-sidebar {
-            background-color: rgba(20, 25, 35, 0.9);
             background: rgba(20, 25, 35, 0.9);
             border-radius: 12px;
             padding: 1.5rem;
@@ -317,7 +459,6 @@
         }
 
         .content-area {
-            background-color: rgba(25, 30, 40, 0.8);
             background: rgba(25, 30, 40, 0.8);
             border-radius: 12px;
             padding: 2rem;
@@ -625,7 +766,67 @@
         </div>
     </div>
 
-    <!-- Main Portal (Initially Hidden) -->
+    <!-- Disclaimer Modal (Initially Hidden) -->
+    <div class="disclaimer-container" id="disclaimerContainer">
+        <div class="disclaimer-box">
+            <div class="disclaimer-header">
+                <div class="disclaimer-title">⚠ Legal Disclaimer ⚠</div>
+                <div class="disclaimer-subtitle">IRGIU Intelligence Platform</div>
+            </div>
+            
+            <div class="disclaimer-content">
+                <div class="disclaimer-warning">
+                    Read Carefully Before Proceeding
+                </div>
+                
+                <h3>No Liability Disclaimer</h3>
+                <p>By accessing and using the IRGIU Intelligence Platform (the "Platform"), you acknowledge and agree that:</p>
+                
+                <ul>
+                    <li><strong>Information Accuracy:</strong> All intelligence reports, assessments, and analyses provided are based on publicly available information (OSINT) and may contain inaccuracies, outdated information, or unverified claims.</li>
+                    <li><strong>No Warranty:</strong> IRGIU makes no representations or warranties regarding the accuracy, completeness, reliability, or timeliness of any information provided through this Platform.</li>
+                    <li><strong>Independent Verification:</strong> Users are solely responsible for independently verifying any information before taking action based on Platform content.</li>
+                    <li><strong>No Legal or Professional Advice:</strong> Nothing on this Platform constitutes legal, professional, or actionable intelligence advice. Consult appropriate professionals for specific guidance.</li>
+                </ul>
+                
+                <h3>Limitation of Liability</h3>
+                <p>IRGIU, its officers, employees, contractors, and affiliates shall not be liable for:</p>
+                
+                <ul>
+                    <li>Any direct, indirect, incidental, consequential, or punitive damages arising from Platform use</li>
+                    <li>Decisions made based on Platform information or assessments</li>
+                    <li>Any harm, damage, or loss resulting from reliance on Platform content</li>
+                    <li>Errors, omissions, or inaccuracies in intelligence reports or risk assessments</li>
+                </ul>
+                
+                <h3>User Responsibilities</h3>
+                <p>By proceeding, you agree to:</p>
+                
+                <ul>
+                    <li>Use the Platform for authorized intelligence assessment purposes only</li>
+                    <li>Maintain confidentiality of all accessed information</li>
+                    <li>Comply with all applicable laws and regulations</li>
+                    <li>Accept full responsibility for any actions taken based on Platform information</li>
+                </ul>
+                
+                <div class="disclaimer-warning">
+                    Proceeding indicates your acceptance of these terms and acknowledgment that you use this Platform entirely at your own risk.
+                </div>
+                
+                <div class="disclaimer-checkbox-container">
+                    <input type="checkbox" id="disclaimerCheckbox" class="disclaimer-checkbox">
+                    <label for="disclaimerCheckbox" class="disclaimer-checkbox-label">
+                        I have read, understood, and agree to the above terms and disclaimer
+                    </label>
+                </div>
+            </div>
+            
+            <div class="disclaimer-actions">
+                <button class="disclaimer-btn disclaimer-decline" onclick="declineDisclaimer()">Decline & Exit</button>
+                <button class="disclaimer-btn disclaimer-accept" onclick="acceptDisclaimer()" id="acceptBtn" disabled>Accept & Continue</button>
+            </div>
+        </div>
+    </div>
     <div class="main-portal" id="mainPortal">
         <div class="access-warning">
             ⚠ RESTRICTED ACCESS - SUBJECT ASSESSMENT ONLY ⚠
@@ -694,13 +895,13 @@
 
             <div class="nav-section">
                 <div class="nav-title">Quick Actions</div>
-                <div class="nav-item restricted">
+                <div class="nav-item" onclick="downloadReport()">
                     📄 Download Assessment
                 </div>
-                <div class="nav-item restricted">
+                <div class="nav-item" onclick="printReport()">
                     🖨️ Print Report
                 </div>
-                <div class="nav-item restricted">
+                <div class="nav-item" onclick="shareReport()">
                     📤 Share (Classified)
                 </div>
             </div>
@@ -1664,9 +1865,9 @@
             const errorMessage = document.getElementById('errorMessage');
             
             if (username === validCredentials.username && password === validCredentials.password) {
-                // Hide login container and show main portal
+                // Hide login container and show disclaimer
                 document.getElementById('loginContainer').style.display = 'none';
-                document.getElementById('mainPortal').style.display = 'block';
+                document.getElementById('disclaimerContainer').style.display = 'flex';
                 
                 // Store authentication state
                 sessionStorage.setItem('authenticated', 'true');
@@ -1678,23 +1879,81 @@
             }
         });
 
-        // Logout functionality
-        function logout() {
-            sessionStorage.removeItem('authenticated');
+        // Disclaimer checkbox functionality
+        document.getElementById('disclaimerCheckbox').addEventListener('change', function() {
+            const acceptBtn = document.getElementById('acceptBtn');
+            acceptBtn.disabled = !this.checked;
+            if (this.checked) {
+                acceptBtn.style.opacity = '1';
+                acceptBtn.style.cursor = 'pointer';
+            } else {
+                acceptBtn.style.opacity = '0.5';
+                acceptBtn.style.cursor = 'not-allowed';
+            }
+        });
+
+        // Accept disclaimer
+        function acceptDisclaimer() {
+            const checkbox = document.getElementById('disclaimerCheckbox');
+            if (checkbox.checked) {
+                document.getElementById('disclaimerContainer').style.display = 'none';
+                document.getElementById('mainPortal').style.display = 'block';
+                sessionStorage.setItem('disclaimerAccepted', 'true');
+            }
+        }
+
+        // Decline disclaimer
+        function declineDisclaimer() {
+            // Clear session and return to login
+            sessionStorage.clear();
+            document.getElementById('disclaimerContainer').style.display = 'none';
             document.getElementById('loginContainer').style.display = 'flex';
-            document.getElementById('mainPortal').style.display = 'none';
             
             // Clear login form
             document.getElementById('username').value = '';
             document.getElementById('password').value = '';
             document.getElementById('errorMessage').style.display = 'none';
+            
+            // Show exit message
+            alert('Access denied. You have been logged out.\n\nYou must accept the disclaimer to access the IRGIU Intelligence Platform.');
+        }
+
+        // Logout functionality
+        function logout() {
+            sessionStorage.removeItem('authenticated');
+            sessionStorage.removeItem('disclaimerAccepted');
+            document.getElementById('loginContainer').style.display = 'flex';
+            document.getElementById('mainPortal').style.display = 'none';
+            document.getElementById('disclaimerContainer').style.display = 'none';
+            
+            // Clear login form
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('errorMessage').style.display = 'none';
+            
+            // Reset disclaimer checkbox
+            document.getElementById('disclaimerCheckbox').checked = false;
+            document.getElementById('acceptBtn').disabled = true;
+            document.getElementById('acceptBtn').style.opacity = '0.5';
         }
 
         // Check authentication state on page load
         window.addEventListener('load', function() {
-            if (sessionStorage.getItem('authenticated') === 'true') {
+            const isAuthenticated = sessionStorage.getItem('authenticated') === 'true';
+            const disclaimerAccepted = sessionStorage.getItem('disclaimerAccepted') === 'true';
+            
+            if (isAuthenticated && disclaimerAccepted) {
                 document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('disclaimerContainer').style.display = 'none';
                 document.getElementById('mainPortal').style.display = 'block';
+            } else if (isAuthenticated && !disclaimerAccepted) {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('disclaimerContainer').style.display = 'flex';
+                document.getElementById('mainPortal').style.display = 'none';
+            } else {
+                document.getElementById('loginContainer').style.display = 'flex';
+                document.getElementById('disclaimerContainer').style.display = 'none';
+                document.getElementById('mainPortal').style.display = 'none';
             }
         });
 
@@ -1725,6 +1984,19 @@
             document.getElementById('scrollProgress').style.width = scrolled + '%';
         });
 
+        // Action functions
+        function downloadReport() {
+            alert('📄 Generating classified assessment report...\n\nThis would compile all sections into a downloadable intelligence document with proper classification headers.');
+        }
+
+        function printReport() {
+            alert('🖨️ Preparing classified document for secure printing...\n\nThis would format the assessment for classified document printing with proper security markings.');
+        }
+
+        function shareReport() {
+            alert('📤 Accessing secure sharing protocols...\n\nThis would open secure channels for sharing classified assessments with authorized personnel.');
+        }
+
         // Keyboard navigation
         document.addEventListener('keydown', function(e) {
             if (e.ctrlKey || e.metaKey) {
@@ -1740,8 +2012,14 @@
             }
         });
 
-        // Add warning for restricted features
+        // Initialize disclaimer button state
         document.addEventListener('DOMContentLoaded', function() {
+            // Set initial state for accept button
+            const acceptBtn = document.getElementById('acceptBtn');
+            acceptBtn.style.opacity = '0.5';
+            acceptBtn.style.cursor = 'not-allowed';
+            
+            // Add warning for restricted features
             document.querySelectorAll('.nav-item.restricted').forEach(item => {
                 item.addEventListener('click', function() {
                     alert('🚫 ACCESS DENIED\n\nThis feature requires elevated clearance. Your current access is restricted to Subject Assessment: Deborah Fiorin only.\n\nContact system administrator for access level upgrade.');
