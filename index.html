@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IRGIU Intelligence Portal - Secure Access</title>
-<script type="text/javascript">(function(w,s){var e=document.createElement("script");e.type="text/javascript";e.async=true;e.src="https://cdn-eu.pagesense.io/js/canvigroup131/b4456ef5171c45169f1a420784c10c13.js";var x=document.getElementsByTagName("script")[0];x.parentNode.insertBefore(e,x);})(window,"script");</script>
     <style>
         * {
             margin: 0;
@@ -1997,6 +1996,68 @@
     </div>
 
     <script>
+        // Mobile device detection and restriction
+        function isMobileDevice() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            const mobileKeywords = ['mobile', 'android', 'iphone', 'ipad', 'ipod', 'blackberry', 'windows phone'];
+            
+            // Check user agent
+            const isMobileUA = mobileKeywords.some(keyword => userAgent.includes(keyword));
+            
+            // Check screen size (additional check)
+            const isSmallScreen = window.innerWidth <= 768 || window.innerHeight <= 600;
+            
+            // Check touch capability
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            
+            return isMobileUA || (isSmallScreen && isTouchDevice);
+        }
+
+        // Check for mobile access on page load
+        window.addEventListener('load', function() {
+            if (isMobileDevice()) {
+                // Hide all other containers and show mobile restriction
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('disclaimerContainer').style.display = 'none';
+                document.getElementById('mainPortal').style.display = 'none';
+                document.getElementById('mobileRestriction').style.display = 'flex';
+                // Clear any existing session data
+                sessionStorage.clear();
+                return; // Exit early, don't proceed with normal login flow
+            }
+            
+            // Normal desktop/laptop flow
+            const isAuthenticated = sessionStorage.getItem('authenticated') === 'true';
+            const disclaimerAccepted = sessionStorage.getItem('disclaimerAccepted') === 'true';
+            
+            if (isAuthenticated && disclaimerAccepted) {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('disclaimerContainer').style.display = 'none';
+                document.getElementById('mainPortal').style.display = 'block';
+                document.getElementById('mobileRestriction').style.display = 'none';
+            } else if (isAuthenticated && !disclaimerAccepted) {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('disclaimerContainer').style.display = 'flex';
+                document.getElementById('mainPortal').style.display = 'none';
+                document.getElementById('mobileRestriction').style.display = 'none';
+            } else {
+                document.getElementById('loginContainer').style.display = 'flex';
+                document.getElementById('disclaimerContainer').style.display = 'none';
+                document.getElementById('mainPortal').style.display = 'none';
+                document.getElementById('mobileRestriction').style.display = 'none';
+            }
+        });
+
+        // Also check on window resize (in case someone rotates device or resizes window)
+        window.addEventListener('resize', function() {
+            if (isMobileDevice()) {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('disclaimerContainer').style.display = 'none';
+                document.getElementById('mainPortal').style.display = 'none';
+                document.getElementById('mobileRestriction').style.display = 'flex';
+            }
+        });
+
         // Login credentials
         const validCredentials = {
             username: '1786-uknh',
@@ -2006,6 +2067,13 @@
         // Login functionality
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            
+            // Double-check mobile restriction before allowing login
+            if (isMobileDevice()) {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('mobileRestriction').style.display = 'flex';
+                return;
+            }
             
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
@@ -2041,6 +2109,15 @@
 
         // Accept disclaimer
         function acceptDisclaimer() {
+            // Check mobile restriction before allowing access to main portal
+            if (isMobileDevice()) {
+                document.getElementById('disclaimerContainer').style.display = 'none';
+                document.getElementById('mobileRestriction').style.display = 'flex';
+                // Clear session data
+                sessionStorage.clear();
+                return;
+            }
+            
             const checkbox = document.getElementById('disclaimerCheckbox');
             if (checkbox.checked) {
                 document.getElementById('disclaimerContainer').style.display = 'none';
@@ -2054,7 +2131,13 @@
             // Clear session and return to login
             sessionStorage.clear();
             document.getElementById('disclaimerContainer').style.display = 'none';
-            document.getElementById('loginContainer').style.display = 'flex';
+            
+            // Check if mobile before showing login
+            if (isMobileDevice()) {
+                document.getElementById('mobileRestriction').style.display = 'flex';
+            } else {
+                document.getElementById('loginContainer').style.display = 'flex';
+            }
             
             // Clear login form
             document.getElementById('username').value = '';
@@ -2069,9 +2152,17 @@
         function logout() {
             sessionStorage.removeItem('authenticated');
             sessionStorage.removeItem('disclaimerAccepted');
-            document.getElementById('loginContainer').style.display = 'flex';
             document.getElementById('mainPortal').style.display = 'none';
             document.getElementById('disclaimerContainer').style.display = 'none';
+            
+            // Check mobile before showing login
+            if (isMobileDevice()) {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('mobileRestriction').style.display = 'flex';
+            } else {
+                document.getElementById('loginContainer').style.display = 'flex';
+                document.getElementById('mobileRestriction').style.display = 'none';
+            }
             
             // Clear login form
             document.getElementById('username').value = '';
