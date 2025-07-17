@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -1998,6 +1998,23 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
+        // Wait for jsPDF to load properly
+        let jsPDFReady = false;
+        
+        // Check if jsPDF loaded successfully
+        function checkJsPDFAvailability() {
+            if (typeof window.jsPDF !== 'undefined') {
+                jsPDFReady = true;
+                console.log('jsPDF library loaded successfully');
+            } else {
+                console.log('jsPDF library not available, will use fallback');
+            }
+        }
+        
+        // Check when page loads
+        window.addEventListener('load', function() {
+            setTimeout(checkJsPDFAvailability, 1000); // Give time for CDN to load
+        });
         // Mobile device detection and restriction
         function isMobileDevice() {
             const userAgent = navigator.userAgent.toLowerCase();
@@ -2228,9 +2245,10 @@
 
         // Action functions
         function downloadReport() {
-            // Check if jsPDF is loaded
+            // First try to load jsPDF if not available
             if (typeof window.jsPDF === 'undefined') {
-                alert('📄 PDF generation library not available.\n\nPlease ensure you have a stable internet connection and try again.');
+                // Fallback: create HTML report for download
+                generateHTMLReport();
                 return;
             }
 
@@ -2238,8 +2256,233 @@
                 generatePDFReport();
             } catch (error) {
                 console.error('PDF generation error:', error);
-                alert('📄 Error generating PDF report.\n\nPlease try again or contact system administrator.');
+                // Fallback to HTML if PDF fails
+                generateHTMLReport();
             }
+        }
+
+        // Fallback HTML report generation
+        function generateHTMLReport() {
+            try {
+                const reportContent = generateReportContent();
+                const blob = new Blob([reportContent], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `IRGIU_Intelligence_Assessment_Deborah_Fiorin_${new Date().toISOString().split('T')[0]}.html`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                alert('📄 Intelligence Assessment Downloaded Successfully\n\n' +
+                      'Format: HTML Report (PDF library unavailable)\n\n' +
+                      'The complete 7-module assessment has been downloaded as an HTML file that can be printed to PDF.');
+            } catch (error) {
+                console.error('HTML generation error:', error);
+                alert('📄 Error generating report.\n\nPlease try again or contact system administrator.');
+            }
+        }
+
+        // Generate HTML report content
+        function generateReportContent() {
+            const currentDate = new Date().toLocaleString('en-GB', { 
+                timeZone: 'Europe/London',
+                day: '2-digit',
+                month: 'long', 
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZoneName: 'short'
+            });
+
+            let htmlContent = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IRGIU Intelligence Assessment - Deborah Fiorin</title>
+    <style>
+        @media print {
+            body { margin: 0; font-size: 12px; }
+            .page-break { page-break-before: always; }
+            .no-print { display: none; }
+        }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            color: #333;
+        }
+        .header {
+            background: #d32f2f;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            margin: -20px -20px 20px -20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .title {
+            text-align: center;
+            color: #64b5f6;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .metadata {
+            background: #f5f5f5;
+            padding: 15px;
+            border-left: 4px solid #64b5f6;
+            margin: 20px 0;
+        }
+        .section-title {
+            color: #64b5f6;
+            font-size: 18px;
+            font-weight: bold;
+            border-bottom: 2px solid #64b5f6;
+            padding-bottom: 5px;
+            margin: 30px 0 15px 0;
+        }
+        .subsection-title {
+            color: #81c784;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+        }
+        .content {
+            margin: 10px 0;
+            text-align: justify;
+        }
+        .highlight {
+            background: rgba(100, 181, 246, 0.1);
+            border: 1px solid rgba(100, 181, 246, 0.3);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .warning {
+            background: rgba(255, 152, 0, 0.1);
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .critical {
+            background: rgba(244, 67, 54, 0.1);
+            border-left: 4px solid #f44336;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .timeline-item {
+            margin: 15px 0;
+            padding: 10px;
+            border-left: 3px solid #64b5f6;
+            background: #f9f9f9;
+        }
+        .risk-item {
+            background: #f0f0f0;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .footer {
+            text-align: center;
+            font-size: 10px;
+            color: #666;
+            margin-top: 30px;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        ⚠ RESTRICTED ACCESS - SUBJECT ASSESSMENT ONLY ⚠
+    </div>
+    
+    <div class="title">IRGIU INTELLIGENCE ASSESSMENT</div>
+    <div class="subtitle">Subject: Deborah Fiorin</div>
+    <div class="subtitle">Comprehensive Intelligence Analysis</div>
+    
+    <div class="metadata">
+        <strong>Report Generated:</strong> ${currentDate}<br>
+        <strong>Classification:</strong> OSINT Assessment with Preliminary Risk Analysis<br>
+        <strong>Prepared By:</strong> Internal Investigation Unit
+    </div>
+`;
+
+            // Extract content from each module
+            const modules = [
+                'initial-inquiry',
+                'osint-investigation', 
+                'employment-assessment',
+                'deep-dive-associates',
+                'temporal-analysis',
+                'comprehensive-evaluation',
+                'enhanced-mitigation'
+            ];
+
+            modules.forEach((moduleId, index) => {
+                const moduleElement = document.getElementById(moduleId);
+                if (!moduleElement) return;
+
+                if (index > 0) {
+                    htmlContent += '<div class="page-break"></div>';
+                }
+
+                // Module title
+                const titleElement = moduleElement.querySelector('.section-title');
+                if (titleElement) {
+                    htmlContent += `<div class="section-title">${titleElement.textContent.trim()}</div>`;
+                }
+
+                // Classification header
+                const classHeaderElement = moduleElement.querySelector('.classification-header');
+                if (classHeaderElement) {
+                    htmlContent += `<div class="warning"><strong>${classHeaderElement.textContent.trim()}</strong></div>`;
+                }
+
+                // Extract various content elements
+                const contentElements = moduleElement.querySelectorAll('.subsection-title, .content-text, .highlight-box, .warning-box, .critical-box, .timeline-item, .risk-item');
+                
+                contentElements.forEach(element => {
+                    const text = element.textContent.trim();
+                    if (!text) return;
+
+                    if (element.classList.contains('subsection-title')) {
+                        htmlContent += `<div class="subsection-title">${text}</div>`;
+                    } else if (element.classList.contains('content-text')) {
+                        htmlContent += `<div class="content">${element.innerHTML}</div>`;
+                    } else if (element.classList.contains('highlight-box')) {
+                        htmlContent += `<div class="highlight">${element.innerHTML}</div>`;
+                    } else if (element.classList.contains('warning-box')) {
+                        htmlContent += `<div class="warning">${element.innerHTML}</div>`;
+                    } else if (element.classList.contains('critical-box')) {
+                        htmlContent += `<div class="critical">${element.innerHTML}</div>`;
+                    } else if (element.classList.contains('timeline-item')) {
+                        htmlContent += `<div class="timeline-item">${element.innerHTML}</div>`;
+                    } else if (element.classList.contains('risk-item')) {
+                        htmlContent += `<div class="risk-item">${element.innerHTML}</div>`;
+                    }
+                });
+            });
+
+            htmlContent += `
+    <div class="footer">
+        IRGIU Intelligence Assessment - Deborah Fiorin | Generated: ${currentDate}<br>
+        This document contains classified intelligence analysis - Handle according to security protocols
+    </div>
+</body>
+</html>`;
+
+            return htmlContent;
         }
 
         function generatePDFReport() {
