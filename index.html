@@ -19,6 +19,116 @@
             min-height: 100vh;
         }
 
+        .mobile-restriction {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .mobile-restriction-box {
+            background: rgba(25, 30, 40, 0.95);
+            border-radius: 12px;
+            padding: 3rem;
+            border: 2px solid rgba(244, 67, 54, 0.5);
+            box-shadow: 0 15px 35px rgba(244, 67, 54, 0.4);
+            width: 100%;
+            max-width: 500px;
+            backdrop-filter: blur(20px);
+        }
+
+        .mobile-restriction-header {
+            margin-bottom: 2rem;
+        }
+
+        .mobile-restriction-title {
+            font-size: 1.8rem;
+            color: #f44336;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .mobile-restriction-subtitle {
+            color: #ffab91;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .security-icon {
+            font-size: 4rem;
+            color: #f44336;
+            margin-bottom: 1.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .mobile-restriction-content {
+            color: #d0d0d0;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .mobile-restriction-content p {
+            margin-bottom: 1rem;
+        }
+
+        .mobile-restriction-warning {
+            background: linear-gradient(45deg, #d32f2f, #f44336);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .requirements-list {
+            text-align: left;
+            background: rgba(15, 20, 30, 0.6);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #64b5f6;
+            margin: 1.5rem 0;
+        }
+
+        .requirements-list h4 {
+            color: #64b5f6;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .requirements-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .requirements-list li {
+            padding: 0.3rem 0;
+            color: #d0d0d0;
+        }
+
+        .requirements-list li::before {
+            content: "▸ ";
+            color: #64b5f6;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
         .login-container {
             display: flex;
             justify-content: center;
@@ -730,6 +840,42 @@
     </style>
 </head>
 <body>
+    <!-- Mobile Restriction Notice -->
+    <div class="mobile-restriction" id="mobileRestriction">
+        <div class="mobile-restriction-box">
+            <div class="mobile-restriction-header">
+                <div class="security-icon">🛡️</div>
+                <div class="mobile-restriction-title">Access Restricted</div>
+                <div class="mobile-restriction-subtitle">IRGIU Intelligence Platform</div>
+            </div>
+            
+            <div class="mobile-restriction-content">
+                <div class="mobile-restriction-warning">
+                    Security Protocol Violation
+                </div>
+                
+                <p><strong>Mobile device access to this intelligence platform is prohibited for security reasons.</strong></p>
+                
+                <p>This system contains classified and sensitive intelligence data that requires enhanced security protocols. Mobile devices do not meet the minimum security requirements for accessing this platform.</p>
+                
+                <div class="requirements-list">
+                    <h4>Authorized Access Devices</h4>
+                    <ul>
+                        <li>Desktop workstations</li>
+                        <li>Laptop computers</li>
+                        <li>Secured network connections</li>
+                        <li>Minimum screen resolution: 1024x768</li>
+                    </ul>
+                </div>
+                
+                <p><strong>Please access this system from an authorized desktop or laptop computer to proceed with authentication.</strong></p>
+                
+                <div class="mobile-restriction-warning">
+                    This restriction is enforced for operational security (OPSEC) compliance
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Login Portal -->
     <div class="login-container" id="loginContainer">
         <div class="login-box">
