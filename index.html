@@ -1995,6 +1995,7 @@
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
         // Mobile device detection and restriction
         function isMobileDevice() {
@@ -2055,6 +2056,8 @@
                 document.getElementById('disclaimerContainer').style.display = 'none';
                 document.getElementById('mainPortal').style.display = 'none';
                 document.getElementById('mobileRestriction').style.display = 'flex';
+                // Clear session data when mobile is detected
+                sessionStorage.clear();
             }
         });
 
@@ -2224,7 +2227,234 @@
 
         // Action functions
         function downloadReport() {
-            alert('📄 Generating classified assessment report...\n\nThis would compile all sections into a downloadable intelligence document with proper classification headers.');
+            // Check if jsPDF is loaded
+            if (typeof window.jsPDF === 'undefined') {
+                alert('📄 PDF generation library not available.\n\nPlease ensure you have a stable internet connection and try again.');
+                return;
+            }
+
+            try {
+                generatePDFReport();
+            } catch (error) {
+                console.error('PDF generation error:', error);
+                alert('📄 Error generating PDF report.\n\nPlease try again or contact system administrator.');
+            }
+        }
+
+        function generatePDFReport() {
+            const { jsPDF } = window.jsPDF;
+            const doc = new jsPDF('p', 'mm', 'a4');
+            
+            // Document settings
+            const pageWidth = 210;
+            const pageHeight = 297;
+            const margin = 20;
+            const lineHeight = 6;
+            let yPosition = margin;
+            
+            // Helper function to add new page if needed
+            function checkNewPage(requiredSpace = 10) {
+                if (yPosition + requiredSpace > pageHeight - margin) {
+                    doc.addPage();
+                    yPosition = margin;
+                    addClassificationHeaders();
+                }
+            }
+            
+            // Helper function to add classification headers
+            function addClassificationHeaders() {
+                doc.setFillColor(211, 47, 47);
+                doc.rect(0, 0, pageWidth, 15, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(10);
+                doc.text('⚠ RESTRICTED ACCESS - SUBJECT ASSESSMENT ONLY ⚠', pageWidth/2, 8, { align: 'center' });
+                doc.setTextColor(0, 0, 0);
+                yPosition = 25;
+            }
+            
+            // Add initial classification header
+            addClassificationHeaders();
+            
+            // Title page
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(20);
+            doc.setTextColor(100, 181, 246);
+            doc.text('IRGIU INTELLIGENCE ASSESSMENT', pageWidth/2, yPosition, { align: 'center' });
+            yPosition += 15;
+            
+            doc.setFontSize(16);
+            doc.setTextColor(0, 0, 0);
+            doc.text('Subject: Deborah Fiorin', pageWidth/2, yPosition, { align: 'center' });
+            yPosition += 10;
+            
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(12);
+            doc.text('Comprehensive Intelligence Analysis', pageWidth/2, yPosition, { align: 'center' });
+            yPosition += 15;
+            
+            // Report metadata
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(10);
+            doc.text('Report Generated:', margin, yPosition);
+            doc.setFont('helvetica', 'normal');
+            doc.text(new Date().toLocaleString('en-GB', { 
+                timeZone: 'Europe/London',
+                day: '2-digit',
+                month: 'long', 
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZoneName: 'short'
+            }), margin + 35, yPosition);
+            yPosition += 8;
+            
+            doc.setFont('helvetica', 'bold');
+            doc.text('Classification:', margin, yPosition);
+            doc.setFont('helvetica', 'normal');
+            doc.text('OSINT Assessment with Preliminary Risk Analysis', margin + 35, yPosition);
+            yPosition += 8;
+            
+            doc.setFont('helvetica', 'bold');
+            doc.text('Prepared By:', margin, yPosition);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Internal Investigation Unit', margin + 35, yPosition);
+            yPosition += 20;
+            
+            // Table of Contents
+            checkNewPage(50);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(14);
+            doc.text('TABLE OF CONTENTS', margin, yPosition);
+            yPosition += 10;
+            
+            const tocEntries = [
+                '01. Initial Inquiry & Profile Analysis',
+                '02. Expanded OSINT Investigation', 
+                '03. Organizational Analysis of Employment History',
+                '04. Deep Dive: Ben Soffa and Elizabeth Arif-Fear',
+                '05. Temporal Overlap and Connection Analysis',
+                '06. Comprehensive Analysis Evaluation',
+                '07. Enhanced Analysis with Mitigation Strategies'
+            ];
+            
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(11);
+            tocEntries.forEach((entry, index) => {
+                doc.text(`${entry}`, margin + 5, yPosition);
+                yPosition += 6;
+            });
+            
+            yPosition += 10;
+            
+            // Extract and add content from each module
+            const modules = [
+                'initial-inquiry',
+                'osint-investigation', 
+                'employment-assessment',
+                'deep-dive-associates',
+                'temporal-analysis',
+                'comprehensive-evaluation',
+                'enhanced-mitigation'
+            ];
+            
+            modules.forEach((moduleId, index) => {
+                checkNewPage(30);
+                
+                const moduleElement = document.getElementById(moduleId);
+                if (!moduleElement) return;
+                
+                // Module title
+                const titleElement = moduleElement.querySelector('.section-title');
+                if (titleElement) {
+                    doc.setFont('helvetica', 'bold');
+                    doc.setFontSize(14);
+                    doc.setTextColor(100, 181, 246);
+                    const titleText = titleElement.textContent.trim();
+                    doc.text(titleText, margin, yPosition);
+                    yPosition += 10;
+                }
+                
+                // Classification header for module
+                const classHeaderElement = moduleElement.querySelector('.classification-header');
+                if (classHeaderElement) {
+                    doc.setFont('helvetica', 'bold');
+                    doc.setFontSize(10);
+                    doc.setTextColor(244, 67, 54);
+                    const classText = classHeaderElement.textContent.trim();
+                    const wrappedClassText = doc.splitTextToSize(classText, pageWidth - 2 * margin);
+                    doc.text(wrappedClassText, margin, yPosition);
+                    yPosition += wrappedClassText.length * 5 + 5;
+                }
+                
+                // Module content
+                const contentElements = moduleElement.querySelectorAll('.subsection-title, .content-text p, .timeline-role, .timeline-details, .risk-title, .highlight-box h3, .warning-box h3, .critical-box h3');
+                
+                contentElements.forEach(element => {
+                    const text = element.textContent.trim();
+                    if (!text) return;
+                    
+                    checkNewPage(15);
+                    
+                    if (element.classList.contains('subsection-title')) {
+                        doc.setFont('helvetica', 'bold');
+                        doc.setFontSize(12);
+                        doc.setTextColor(129, 199, 132);
+                        yPosition += 5;
+                    } else if (element.classList.contains('timeline-role')) {
+                        doc.setFont('helvetica', 'bold');
+                        doc.setFontSize(10);
+                        doc.setTextColor(0, 0, 0);
+                    } else if (element.classList.contains('risk-title')) {
+                        doc.setFont('helvetica', 'bold');
+                        doc.setFontSize(10);
+                        doc.setTextColor(100, 181, 246);
+                    } else if (element.tagName === 'H3') {
+                        doc.setFont('helvetica', 'bold');
+                        doc.setFontSize(11);
+                        if (element.closest('.warning-box')) {
+                            doc.setTextColor(255, 152, 0);
+                        } else if (element.closest('.critical-box')) {
+                            doc.setTextColor(244, 67, 54);
+                        } else {
+                            doc.setTextColor(100, 181, 246);
+                        }
+                        yPosition += 3;
+                    } else {
+                        doc.setFont('helvetica', 'normal');
+                        doc.setFontSize(9);
+                        doc.setTextColor(0, 0, 0);
+                    }
+                    
+                    const wrappedText = doc.splitTextToSize(text, pageWidth - 2 * margin);
+                    doc.text(wrappedText, margin, yPosition);
+                    yPosition += wrappedText.length * lineHeight + 2;
+                });
+                
+                yPosition += 10; // Space between modules
+            });
+            
+            // Footer on each page
+            const totalPages = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= totalPages; i++) {
+                doc.setPage(i);
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(8);
+                doc.setTextColor(128, 128, 128);
+                doc.text(`IRGIU Intelligence Assessment - Deborah Fiorin | Page ${i} of ${totalPages}`, pageWidth/2, pageHeight - 10, { align: 'center' });
+                doc.text(`Generated: ${new Date().toLocaleString('en-GB')}`, pageWidth/2, pageHeight - 5, { align: 'center' });
+            }
+            
+            // Save the PDF
+            const fileName = `IRGIU_Intelligence_Assessment_Deborah_Fiorin_${new Date().toISOString().split('T')[0]}.pdf`;
+            doc.save(fileName);
+            
+            // Show success message
+            setTimeout(() => {
+                alert('📄 Intelligence Assessment Downloaded Successfully\n\n' +
+                      `File: ${fileName}\n\n` +
+                      'The complete 7-module assessment has been generated and downloaded as a classified intelligence report.');
+            }, 500);
         }
 
         function printReport() {
